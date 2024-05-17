@@ -17,7 +17,7 @@ namespace RockyStudios.BetterNumberSystem
         /// <summary>
         /// The numerical value of the number (in base 10)
         /// </summary>
-        public double NumericValue = 0;
+        public decimal NumericValue = 0;
 
         /// <summary>
         /// The measurement category
@@ -49,13 +49,13 @@ namespace RockyStudios.BetterNumberSystem
             Number output = new Number();
 
             // Numerical value
-            double numericValue = System.Convert.ToDouble(match.Groups[1].Value);
+            decimal numericValue = System.Convert.ToDecimal(match.Groups[1].Value);
             output.NumericValue = numericValue;
 
             // Measurement type
             MeasurementType parsedMeasurementType;
             bool measurementTypeParseResult = Enum.TryParse<MeasurementType>(match.Groups[4].Value, out parsedMeasurementType);
-            if(!measurementTypeParseResult) throw new ArgumentException("Number data string had invalid measurement type.");
+            if (!measurementTypeParseResult) throw new ArgumentException("Number data string had invalid measurement type.");
             output.MeasurementType = parsedMeasurementType;
 
             // Measurement unit
@@ -73,10 +73,68 @@ namespace RockyStudios.BetterNumberSystem
         /// <returns>A string that represents the current object</returns>
         public override string ToString()
         {
-            return "==Number== \n" +
-            "numericValue: " + NumericValue.ToString() + "\n" +
-            "measurementType: " + MeasurementType.ToString() + "\n" +
-            "measurementUnit: " + MeasurementUnit.ToString() + "\n";
+            return Get(unit: true, type: true);
+        }
+
+        // ========= GET METHODS ===========
+        /// <summary>
+        /// Display the number class as text
+        /// </summary>
+        /// <param name="numericValue">Where to include the plain number</param>
+        /// <param name="unit">Whether to include the units</param>
+        /// <param name="type">Whether to include the measurement type</param>
+        /// <param name="scientific">Whether to display in scientific notation</param>
+        /// <returns>The string version of the number according to the parameters</returns>
+        public dynamic Get(bool numericValue = true, bool unit = false, bool type = false, bool scientific = false)
+        {
+            if (numericValue && !unit && !type && !scientific)
+            {
+                //Plain
+                return NumericValue;
+            }
+            string outputString = "";
+            if (!scientific)
+            {
+                if (numericValue)
+                {
+                    outputString += NumericValue;
+                }
+                if (unit)
+                {
+                    outputString += MeasurementUnit.ToString();
+                }
+                if (type)
+                {
+                    outputString += " " + MeasurementType.ToString();
+                }
+            }
+            else
+            {
+                // Scientific
+                outputString = ToScientificNotation(NumericValue);
+                if (unit)
+                {
+                    outputString += MeasurementUnit.ToString();
+                }
+                if (type)
+                {
+                    outputString += " " + MeasurementType.ToString();
+                }
+            }
+            return outputString;
+        }
+
+        private static string ToScientificNotation(decimal number)
+        {
+            int exponent = (int)Math.Floor(Math.Log10(Math.Abs((double)number)));
+            double mantissa = (double)number / Math.Pow(10, exponent);
+            string mantissaStr = mantissa.ToString("R");
+            int decimalIndex = mantissaStr.IndexOf('.');
+            if (decimalIndex != -1 && mantissaStr.Length - decimalIndex - 1 > 10)
+            {
+                mantissaStr = mantissaStr.Substring(0, decimalIndex + 11);
+            }
+            return $"{mantissaStr} x 10^{exponent}";
         }
     }
     /// <summary>

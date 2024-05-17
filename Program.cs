@@ -4,7 +4,9 @@
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(Number.Parse("10.5Millimetre Length"));
+            Number myNum = Number.Parse("100000Millimetre Length");
+            Console.WriteLine(myNum);
+            Console.WriteLine(myNum.Get(unit: true, scientific: true, type: true));
         }
     }
 }
