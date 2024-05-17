@@ -22,7 +22,7 @@ namespace RockyStudios.BetterNumberSystem
         /// <summary>
         /// The measurement unit
         /// </summary>
-        public MeasurementUnit MeasurementUnit = MeasurementUnit.Plain;
+        public NumberUnit Unit = NumberUnit.GetNumberUnitByFullName("Plain");
 
         /// <summary>
         /// Generates a plain number (0)
@@ -31,19 +31,19 @@ namespace RockyStudios.BetterNumberSystem
         {
             NumericValue = 0;
             MeasurementType = MeasurementType.Plain;
-            MeasurementUnit = MeasurementUnit.Plain;
+            Unit = NumberUnit.GetNumberUnitByFullName("Plain");
         }
         /// <summary>
         /// Generates a number with custom parameters
         /// </summary>
         /// <param name="numericValue">The numerical value of the number</param>
         /// <param name="measurementType">The category of measurement</param>
-        /// <param name="measurementUnit">The unit of measurement</param>
-        public Number(double numericValue, MeasurementType measurementType, MeasurementUnit measurementUnit)
+        /// <param name="unit">The unit of measurement</param>
+        public Number(double numericValue, MeasurementType measurementType, NumberUnit unit)
         {
             NumericValue =(decimal)numericValue;
             MeasurementType = measurementType;
-            MeasurementUnit = measurementUnit;
+            Unit = unit;
         }
 
 
@@ -76,11 +76,10 @@ namespace RockyStudios.BetterNumberSystem
             if (!measurementTypeParseResult) throw new ArgumentException("Number data string had invalid measurement type.");
             output.MeasurementType = parsedMeasurementType;
 
-            // Measurement unit
-            MeasurementUnit parsedMeasurementUnit;
-            bool measurementUnitParseResult = Enum.TryParse<MeasurementUnit>(match.Groups[3].Value, out parsedMeasurementUnit);
-            if (!measurementUnitParseResult) throw new ArgumentException("Number data string had invalid measurement unit.");
-            output.MeasurementUnit = parsedMeasurementUnit;
+            // Unit
+            NumberUnit parsedNumberUnit = NumberUnit.GetNumberUnitBySuffix(match.Groups[3].Value);
+            if(parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
+            output.Unit = parsedNumberUnit;
 
             return output;
         }
@@ -119,7 +118,7 @@ namespace RockyStudios.BetterNumberSystem
                 }
                 if (unit)
                 {
-                    outputString += MeasurementUnit.ToString();
+                    outputString += Unit.Suffix;
                 }
                 if (type)
                 {
@@ -132,7 +131,7 @@ namespace RockyStudios.BetterNumberSystem
                 outputString = ToScientificNotation(NumericValue);
                 if (unit)
                 {
-                    outputString += MeasurementUnit.ToString();
+                    outputString += Unit.ToString();
                 }
                 if (type)
                 {
@@ -209,52 +208,5 @@ namespace RockyStudios.BetterNumberSystem
         /// A number representing a force acting on an object
         /// </summary>
         Force
-    }
-
-    /// <summary>
-    /// The different units a measurement can have
-    /// </summary>
-    public enum MeasurementUnit
-    {
-        /// <summary>
-        /// No unit
-        /// </summary>
-        Plain,
-        /// <summary>
-        /// Millimetres (mm)
-        /// </summary>
-        Millimetre,
-        /// <summary>
-        /// Millimetres (mm)
-        /// </summary>
-        Centimetre,
-        /// <summary>
-        /// Metre (m)
-        /// </summary>
-        Metre,
-        /// <summary>
-        /// Kilometres (km)
-        /// </summary>
-        Kilometre,
-        /// <summary>
-        /// Square Millimetres (mm²)
-        /// </summary>
-        SqMillimetre,
-        /// <summary>
-        /// Square Centimetres (cm²)
-        /// </summary>
-        SqCentimetre,
-        /// <summary>
-        /// Square Metres (m²)
-        /// </summary>
-        SqMetre,
-        /// <summary>
-        /// Square Kilometres (km²)
-        /// </summary>
-        SqKilometre,
-        /// <summary>
-        /// Hectares (ha)
-        /// </summary>
-        Hectare
     }
 }
