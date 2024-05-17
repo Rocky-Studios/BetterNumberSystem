@@ -147,18 +147,38 @@ namespace BetterNumberSystem
         /// <summary>
         /// Millimetres (mm)
         /// </summary>
-        mm,
+        Millimetre,
         /// <summary>
         /// Millimetres (mm)
         /// </summary>
-        cm,
+        Centimetre,
         /// <summary>
         /// Metre (m)
         /// </summary>
-        m,
+        Metre,
         /// <summary>
         /// Kilometres (km)
         /// </summary>
-        km
+        Kilometre,
+        /// <summary>
+        /// Square Millimetres (mm²)
+        /// </summary>
+        SqMillimetre,
+        /// <summary>
+        /// Square Centimetres (cm²)
+        /// </summary>
+        SqCentimetre,
+        /// <summary>
+        /// Square Metres (m²)
+        /// </summary>
+        SqMetre,
+        /// <summary>
+        /// Square Kilometres (km²)
+        /// </summary>
+        SqKilometre,
+        /// <summary>
+        /// Hectares (ha)
+        /// </summary>
+        Hectare
     }
 }
