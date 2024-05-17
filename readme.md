@@ -7,7 +7,7 @@ Standard numbering in programming is good for just that, *standard programming*.
 
 - No easy way to show a number in different notations, eg 123,000,000 as '123 million' or 123 × 10⁶
 
-- No easy way to convert between bases, eg. decimal, binary, ternary, hexadecimal
+- No straightforward way to perform math with different units
 
 This new number system (that adds on top of the base one) aims to address these issues and make progamming with numbers in certain fields better and easier.
 
