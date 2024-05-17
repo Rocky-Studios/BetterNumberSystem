@@ -15,7 +15,7 @@ namespace RockyStudios.BetterNumberSystem
         // =========== CLASS VARIABLES ===========
 
         /// <summary>
-        /// The numerical value of the number (in base 10)
+        /// The numerical value of the number
         /// </summary>
         public decimal NumericValue = 0;
 
@@ -28,6 +28,29 @@ namespace RockyStudios.BetterNumberSystem
         /// The measurement unit
         /// </summary>
         public MeasurementUnit MeasurementUnit = MeasurementUnit.Plain;
+
+        /// <summary>
+        /// Generates a plain number (0)
+        /// </summary>
+        public Number()
+        {
+            NumericValue = 0;
+            MeasurementType = MeasurementType.Plain;
+            MeasurementUnit = MeasurementUnit.Plain;
+        }
+        /// <summary>
+        /// Generates a number with custom parameters
+        /// </summary>
+        /// <param name="numericValue">The numerical value of the number</param>
+        /// <param name="measurementType">The category of measurement</param>
+        /// <param name="measurementUnit">The unit of measurement</param>
+        public Number(double numericValue, MeasurementType measurementType, MeasurementUnit measurementUnit)
+        {
+            NumericValue =(decimal)numericValue;
+            MeasurementType = measurementType;
+            MeasurementUnit = measurementUnit;
+        }
+
 
         /// <summary>
         /// Converts a string of number data into the Number class
