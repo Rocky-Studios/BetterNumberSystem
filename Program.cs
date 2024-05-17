@@ -1,6 +1,4 @@
-﻿using BetterNumberSystem;
-
-namespace RockyStudios.BetterNumberSystem
+﻿namespace RockyStudios.BetterNumberSystem
 {
     /// <summary>
     /// The main program file for the Better Number System

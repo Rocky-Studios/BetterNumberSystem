@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BetterNumberSystem
+namespace RockyStudios.BetterNumberSystem
 {
     /// <summary>
     /// The universal class for all measurements in the Better Number System
