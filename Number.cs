@@ -35,20 +35,20 @@ namespace BetterNumberSystem
             {
                 throw new ArgumentException("Please provide a valid number data string.");
             }
-            string pattern = @"^(-?\d+(\.\d+)?)(\S*)\s\S*\sb([2-9]|\d{2,})$";
+            string pattern = @"[0-9]*\\.[0-9]+[A-Za-z]+\\s[A-Za-z]+";
             Match match = Regex.Match(numberData, pattern);
             if (!match.Success)
             {
                 throw new ArgumentException("Please provide a valid number data string.");
             }
-            // Correct format all good!
             Number output = new Number();
 
             double numericValue = System.Convert.ToDouble(match.Groups[1].Value);
             output.NumericValue = numericValue;
-
-            int @base = System.Convert.ToInt32(match.Groups[4].Value);
-            Console.WriteLine("base" + @base);
+            MeasurementType result;
+            Console.WriteLine(match.Groups[4].Value);
+            Enum.TryParse<MeasurementType>(match.Groups[2].Value, out result);
+            Console.WriteLine(result);
 
             return output;
         }
@@ -59,7 +59,8 @@ namespace BetterNumberSystem
         /// <returns>A string that represents the current object</returns>
         public override string ToString()
         {
-            return "Number; numericValue: " + NumericValue.ToString() + ", base: ";
+            return "Number \n"+
+            "numericValue: " + NumericValue.ToString();
         }
     }
     /// <summary>
