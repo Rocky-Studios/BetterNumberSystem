@@ -13,7 +13,7 @@ namespace RockyStudios.BetterNumberSystem
         /// <param name="args">Application parameters</param>
         public static void Main(string[] args)
         {
-            Console.WriteLine(Number.Parse("10.5cm Length"));
+            Console.WriteLine(Number.Parse("-10.5cm Length"));
         }
     }
 

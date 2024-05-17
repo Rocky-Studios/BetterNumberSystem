@@ -25,6 +25,11 @@ namespace BetterNumberSystem
         public MeasurementType MeasurementType = MeasurementType.Plain;
 
         /// <summary>
+        /// The measurement unit
+        /// </summary>
+        public MeasurementUnit MeasurementUnit = MeasurementUnit.Plain;
+
+        /// <summary>
         /// Converts a string of number data into the Number class
         /// </summary>
         /// <param name="numberData">The data of the number, example: 10cm Length b10 (numberUnit Type bBase)
@@ -35,7 +40,7 @@ namespace BetterNumberSystem
             {
                 throw new ArgumentException("Please provide a valid number data string.");
             }
-            string pattern = @"[0-9]*\\.[0-9]+[A-Za-z]+\\s[A-Za-z]+";
+            string pattern = @"^(-?\d+(\.\d+)?)(\S*)\s(\S*)$";
             Match match = Regex.Match(numberData, pattern);
             if (!match.Success)
             {
@@ -43,12 +48,21 @@ namespace BetterNumberSystem
             }
             Number output = new Number();
 
+            // Numerical value
             double numericValue = System.Convert.ToDouble(match.Groups[1].Value);
             output.NumericValue = numericValue;
-            MeasurementType result;
-            Console.WriteLine(match.Groups[4].Value);
-            Enum.TryParse<MeasurementType>(match.Groups[2].Value, out result);
-            Console.WriteLine(result);
+
+            // Measurement type
+            MeasurementType parsedMeasurementType;
+            bool measurementTypeParseResult = Enum.TryParse<MeasurementType>(match.Groups[4].Value, out parsedMeasurementType);
+            if(!measurementTypeParseResult) throw new ArgumentException("Number data string had invalid measurement type.");
+            output.MeasurementType = parsedMeasurementType;
+
+            // Measurement unit
+            MeasurementUnit parsedMeasurementUnit;
+            bool measurementUnitParseResult = Enum.TryParse<MeasurementUnit>(match.Groups[3].Value, out parsedMeasurementUnit);
+            if (!measurementUnitParseResult) throw new ArgumentException("Number data string had invalid measurement unit.");
+            output.MeasurementUnit = parsedMeasurementUnit;
 
             return output;
         }
@@ -59,14 +73,15 @@ namespace BetterNumberSystem
         /// <returns>A string that represents the current object</returns>
         public override string ToString()
         {
-            return "Number \n"+
-            "numericValue: " + NumericValue.ToString();
+            return "==Number== \n" +
+            "numericValue: " + NumericValue.ToString() + "\n" +
+            "measurementType: " + MeasurementType.ToString() + "\n" +
+            "measurementUnit: " + MeasurementUnit.ToString() + "\n";
         }
     }
     /// <summary>
     /// The different categories that a number can be grouped into
     /// </summary>
-    /// <example>MeasurementType.Length</example>
     public enum MeasurementType
     {
         /// <summary>
@@ -118,5 +133,32 @@ namespace BetterNumberSystem
         /// A number representing a force acting on an object
         /// </summary>
         Force
+    }
+
+    /// <summary>
+    /// The different units a measurement can have
+    /// </summary>
+    public enum MeasurementUnit
+    {
+        /// <summary>
+        /// No unit
+        /// </summary>
+        Plain,
+        /// <summary>
+        /// Millimetres (mm)
+        /// </summary>
+        mm,
+        /// <summary>
+        /// Millimetres (mm)
+        /// </summary>
+        cm,
+        /// <summary>
+        /// Metre (m)
+        /// </summary>
+        m,
+        /// <summary>
+        /// Kilometres (km)
+        /// </summary>
+        km
     }
 }
