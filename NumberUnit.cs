@@ -49,6 +49,20 @@
             new NumberUnit("Centimetre", "cm", MeasurementType.Length, proportionalToBaseUnit: 100),
             new NumberUnit("Metre", "m", MeasurementType.Length, baseUnit: true),
             new NumberUnit("Kilometre", "km", MeasurementType.Length, proportionalToBaseUnit: 0.001f),
+            // Area
+            new NumberUnit("SqMillimetre", "mm²", MeasurementType.Area, proportionalToBaseUnit: 1000000),
+            new NumberUnit("SqCentimetre", "cm²", MeasurementType.Area, proportionalToBaseUnit: 10000),
+            new NumberUnit("SqMetre", "m²", MeasurementType.Area, baseUnit: true),
+            new NumberUnit("SqKilometre", "km²", MeasurementType.Area, proportionalToBaseUnit: 0.000001f),
+            new NumberUnit("Hectare", "ha", MeasurementType.Area, proportionalToBaseUnit: 0.0001f),
+            // Volume
+            new NumberUnit("CuMillimetre", "mm³", MeasurementType.Volume, proportionalToBaseUnit: 1000000000),
+            new NumberUnit("CuCentimetre", "cm³", MeasurementType.Volume, proportionalToBaseUnit: 1000000),
+            new NumberUnit("CuMetre", "m³", MeasurementType.Volume, baseUnit: true),
+            new NumberUnit("CuKilometre", "km³", MeasurementType.Volume, proportionalToBaseUnit: 0.000000001f),
+            new NumberUnit("Millilitre", "ml", MeasurementType.Volume, proportionalToBaseUnit: 1000000f),
+            new NumberUnit("Litre", "l", MeasurementType.Volume, proportionalToBaseUnit: 1000f),
+            new NumberUnit("Kilolitre", "kl", MeasurementType.Volume, proportionalToBaseUnit: 1f),
             // Time
             new NumberUnit("Millisecond", "ms", MeasurementType.Time, proportionalToBaseUnit: 3600000f),
             new NumberUnit("Second", "s", MeasurementType.Time, proportionalToBaseUnit: 3600f),
