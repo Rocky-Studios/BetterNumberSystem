@@ -16,7 +16,7 @@
         /// <summary>
         /// The full name of the unit eg. Millimetre
         /// </summary>
-        public string FullName = "";
+        public string FullName { get; set; }
         /// <summary>
         /// The plural full name of the unit eg. Millimetres
         /// </summary>
@@ -33,9 +33,13 @@
         /// The ratio of this unit to the base unit eg. for millimetres the base unit is metres so the proportion is 1/1000 or 0.001
         /// </summary>
         public double ProportionToBaseUnit = 1;
+        /// <summary>
+        /// Whether this unit can be negative
+        /// </summary>
+        public bool CanBeNegative { get; set; }
         public MeasurementType MeasurementType;
 
-        public PerNumberUnit(NumberUnit unitA, NumberUnit unitB, MeasurementType measurementType, bool baseUnit = false, double proportionalToBaseUnit = 1)
+        public PerNumberUnit(NumberUnit unitA, NumberUnit unitB, MeasurementType measurementType, bool baseUnit = false, double proportionalToBaseUnit = 1, bool canBeNegative = false)
         {
             UnitA = unitA; UnitB = unitB;
             FullName = unitA.FullName + " Per " + unitB.FullName;
@@ -43,6 +47,7 @@
             MeasurementType = measurementType;
             if (_perNumberUnits == null) _perNumberUnits = new List<PerNumberUnit>();
             _perNumberUnits.Add(this);
+            CanBeNegative = canBeNegative;
         }
 
         private static List<PerNumberUnit> _perNumberUnits = new()

@@ -41,6 +41,7 @@ namespace BetterNumberSystem
         /// <param name="unit">The unit of measurement</param>
         public Number(double numericValue, MeasurementType measurementType, INumberUnit unit)
         {
+            if (numericValue < 0 && !unit.CanBeNegative) throw new Exception(unit.FullName + " cannot be negative");
             NumericValue = (decimal)numericValue;
             MeasurementType = measurementType;
             Unit = unit;
@@ -275,6 +276,7 @@ namespace BetterNumberSystem
                 throw new ArgumentException("Cannot add numbers with different measurement types");
             }
             Number bConverted = b.Convert(a.Unit);
+            if ((double)(a.NumericValue + bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
             return new Number(
                 (double)(a.NumericValue + bConverted.NumericValue),
                 a.MeasurementType,
@@ -295,6 +297,7 @@ namespace BetterNumberSystem
                 throw new ArgumentException("Cannot add numbers with different measurement types");
             }
             Number bConverted = b.Convert(a.Unit);
+            if ((double)(a.NumericValue - bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
             return new Number(
                 (double)(a.NumericValue - bConverted.NumericValue),
                 a.MeasurementType,

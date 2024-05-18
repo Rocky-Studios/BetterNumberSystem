@@ -8,7 +8,7 @@
         /// <summary>
         /// The full name of the unit eg. Millimetre
         /// </summary>
-        public string FullName = "";
+        public string FullName { get; set; }
         /// <summary>
         /// The plural full name of the unit eg. Millimetres
         /// </summary>
@@ -25,8 +25,12 @@
         /// The ratio of this unit to the base unit eg. for millimetres the base unit is metres so the proportion is 1/1000 or 0.001
         /// </summary>
         public double ProportionToBaseUnit = 1;
+        /// <summary>
+        /// Whether this unit can be negative
+        /// </summary>
+        public bool CanBeNegative { get; set; }
         public MeasurementType MeasurementType;
-        public NumberUnit(string fullName, string suffix, MeasurementType measurementType, bool baseUnit = false, double proportionalToBaseUnit = 1)
+        public NumberUnit(string fullName, string suffix, MeasurementType measurementType, bool baseUnit = false, double proportionalToBaseUnit = 1, bool canBeNegative = false)
         {
             FullName = fullName;
             FullNamePlural = fullName + "s";
@@ -34,6 +38,7 @@
             BaseUnit = baseUnit;
             ProportionToBaseUnit = proportionalToBaseUnit;
             MeasurementType = measurementType;
+            CanBeNegative = canBeNegative;
             if (_numberUnits == null) _numberUnits = new List<NumberUnit>();
             _numberUnits.Add(this);
         }
@@ -43,7 +48,7 @@
         /// </summary>
         private static List<NumberUnit> _numberUnits = new()
         {
-            new NumberUnit("Plain", "", MeasurementType.Plain, baseUnit: true),
+            new NumberUnit("Plain", "", MeasurementType.Plain, baseUnit: true, canBeNegative: true),
             // Length
             new NumberUnit("Millimetre", "mm", MeasurementType.Length, proportionalToBaseUnit: 1000),
             new NumberUnit("Centimetre", "cm", MeasurementType.Length, proportionalToBaseUnit: 100),
@@ -80,8 +85,8 @@
             new NumberUnit("Kilogram", "kg", MeasurementType.Mass, proportionalToBaseUnit: 0.001f),
             new NumberUnit("Tonne", "t", MeasurementType.Mass, proportionalToBaseUnit: 0.000001f),
             // Angles
-            new NumberUnit("Radian", "rad", MeasurementType.Angle, proportionalToBaseUnit: MathF.PI/180f),
-            new NumberUnit("Degree", "°", MeasurementType.Angle, baseUnit: true)
+            new NumberUnit("Radian", "rad", MeasurementType.Angle, proportionalToBaseUnit: MathF.PI/180f, canBeNegative: true),
+            new NumberUnit("Degree", "°", MeasurementType.Angle, baseUnit: true, canBeNegative: true)
         };
         /// <summary>
         /// Gets all the currently available number units
@@ -128,5 +133,7 @@
     public interface INumberUnit
     {
         string Suffix { get; set; }
+        bool CanBeNegative { get; set; }
+        string FullName { get; set; }
     }
 }
