@@ -1,9 +1,9 @@
 ﻿namespace RockyStudios.BetterNumberSystem
 {
     /// <summary>
-    /// A unit of measurement
+    /// A singular unit of measurement
     /// </summary>
-    public class NumberUnit
+    public class NumberUnit : INumberUnit
     {
         /// <summary>
         /// The full name of the unit eg. Millimetre
@@ -16,7 +16,7 @@
         /// <summary>
         /// The short suffix of the unit eg. mm
         /// </summary>
-        public string Suffix = "";
+        public string Suffix { get; set; }
         /// <summary>
         /// Whether this unit is a base of its category eg. metres is the base for length
         /// </summary>
@@ -25,13 +25,15 @@
         /// The ratio of this unit to the base unit eg. for millimetres the base unit is metres so the proportion is 1/1000 or 0.001
         /// </summary>
         public double ProportionToBaseUnit = 1;
-        public NumberUnit(string fullName, string suffix, bool baseUnit = false, double proportionalToBaseUnit = 1)
+        public MeasurementType MeasurementType;
+        public NumberUnit(string fullName, string suffix, MeasurementType measurementType, bool baseUnit = false, double proportionalToBaseUnit = 1)
         {
             FullName = fullName;
             FullNamePlural = fullName + "s";
             Suffix = suffix;
             BaseUnit = baseUnit;
             ProportionToBaseUnit = proportionalToBaseUnit;
+            MeasurementType = measurementType;
             if (_numberUnits == null) _numberUnits = new List<NumberUnit>();
             _numberUnits.Add(this);
         }
@@ -41,11 +43,23 @@
         /// </summary>
         private static List<NumberUnit> _numberUnits = new()
         {
-            new NumberUnit("Plain", "", baseUnit: true),
-            new NumberUnit("Millimetre", "mm", proportionalToBaseUnit: 0.001),
-            new NumberUnit("Centimetre", "cm", proportionalToBaseUnit: 0.01),
-            new NumberUnit("Metre", "m", baseUnit: true),
-            new NumberUnit("Kilometre", "km", proportionalToBaseUnit: 1000),
+            new NumberUnit("Plain", "", MeasurementType.Plain, baseUnit: true),
+            // Length
+            new NumberUnit("Millimetre", "mm", MeasurementType.Length, proportionalToBaseUnit: 0.001),
+            new NumberUnit("Centimetre", "cm", MeasurementType.Length, proportionalToBaseUnit: 0.01),
+            new NumberUnit("Metre", "m", MeasurementType.Length, baseUnit: true),
+            new NumberUnit("Kilometre", "km", MeasurementType.Length, proportionalToBaseUnit: 1000),
+            // Time
+            new NumberUnit("Millisecond", "ms", MeasurementType.Time, proportionalToBaseUnit: 3600000f),
+            new NumberUnit("Second", "s", MeasurementType.Time, proportionalToBaseUnit: 3600f),
+            new NumberUnit("Minute", "m", MeasurementType.Time, proportionalToBaseUnit: 60f),
+            new NumberUnit("Hour", "h", MeasurementType.Time, baseUnit: true),
+            new NumberUnit("Day", "d", MeasurementType.Time, proportionalToBaseUnit: 24f),
+            new NumberUnit("Week", "w", MeasurementType.Time, proportionalToBaseUnit: 24f*7f),
+            new NumberUnit("Year", "y", MeasurementType.Time, proportionalToBaseUnit: 24f*365f),
+            new NumberUnit("Decade", "d", MeasurementType.Time, proportionalToBaseUnit: 24f*365f*10),
+            new NumberUnit("Century", "c", MeasurementType.Time, proportionalToBaseUnit: 24f*365f*100),
+            new NumberUnit("Millenium", "m", MeasurementType.Time, proportionalToBaseUnit: 24f*365f*1000),
         };
         /// <summary>
         /// Gets all the currently available number units
@@ -87,5 +101,10 @@
             }
             return null;
         }
+    }
+
+    public interface INumberUnit
+    {
+        string Suffix { get; set; }
     }
 }

@@ -7,8 +7,8 @@
             Number myNum = Number.Parse("100000km Length");
             Number myNum2 = new Number(
                 15.2354,
-                MeasurementType.Length,
-                NumberUnit.GetNumberUnitByFullName("Metre")
+                MeasurementType.Speed,
+                PerNumberUnit.GetPerNumberUnitByFullName("Metre Per Second")
                 );
             Console.WriteLine(myNum2);
         }

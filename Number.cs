@@ -22,7 +22,7 @@ namespace RockyStudios.BetterNumberSystem
         /// <summary>
         /// The measurement unit
         /// </summary>
-        public NumberUnit Unit = NumberUnit.GetNumberUnitByFullName("Plain");
+        public INumberUnit Unit = NumberUnit.GetNumberUnitByFullName("Plain");
 
         /// <summary>
         /// Generates a plain number (0)
@@ -39,9 +39,9 @@ namespace RockyStudios.BetterNumberSystem
         /// <param name="numericValue">The numerical value of the number</param>
         /// <param name="measurementType">The category of measurement</param>
         /// <param name="unit">The unit of measurement</param>
-        public Number(double numericValue, MeasurementType measurementType, NumberUnit unit)
+        public Number(double numericValue, MeasurementType measurementType, INumberUnit unit)
         {
-            NumericValue =(decimal)numericValue;
+            NumericValue = (decimal)numericValue;
             MeasurementType = measurementType;
             Unit = unit;
         }
@@ -78,7 +78,7 @@ namespace RockyStudios.BetterNumberSystem
 
             // Unit
             NumberUnit parsedNumberUnit = NumberUnit.GetNumberUnitBySuffix(match.Groups[3].Value);
-            if(parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
+            if (parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
             output.Unit = parsedNumberUnit;
 
             return output;
@@ -207,6 +207,11 @@ namespace RockyStudios.BetterNumberSystem
         /// <summary>
         /// A number representing a force acting on an object
         /// </summary>
-        Force
+        Force,
+
+        /// <summary>
+        /// A number representing an amount of time
+        /// </summary>
+        Time,
     }
 }
