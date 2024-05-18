@@ -169,6 +169,38 @@ namespace BetterNumberSystem
             }
             return $"{mantissaStr} x 10^{exponent}";
         }
+
+        // ========= MATH METHODS ===========
+        /// <summary>
+        /// Whether two numbers have the same value when their units are converted
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator == (Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                return false;
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return a.NumericValue == bConverted.NumericValue;
+        }
+        /// <summary>
+        /// Whether two numbers have different values even when their units are converted
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator !=(Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                return false;
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return a.NumericValue != bConverted.NumericValue;
+        }
     }
     /// <summary>
     /// The different categories that a number can be grouped into
