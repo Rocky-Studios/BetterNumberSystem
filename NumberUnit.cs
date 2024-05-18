@@ -54,12 +54,20 @@
             new NumberUnit("Second", "s", MeasurementType.Time, proportionalToBaseUnit: 3600f),
             new NumberUnit("Minute", "m", MeasurementType.Time, proportionalToBaseUnit: 60f),
             new NumberUnit("Hour", "h", MeasurementType.Time, baseUnit: true),
-            new NumberUnit("Day", "d", MeasurementType.Time, proportionalToBaseUnit: 24f),
-            new NumberUnit("Week", "w", MeasurementType.Time, proportionalToBaseUnit: 24f*7f),
-            new NumberUnit("Year", "y", MeasurementType.Time, proportionalToBaseUnit: 24f*365f),
-            new NumberUnit("Decade", "d", MeasurementType.Time, proportionalToBaseUnit: 24f*365f*10),
-            new NumberUnit("Century", "c", MeasurementType.Time, proportionalToBaseUnit: 24f*365f*100),
-            new NumberUnit("Millenium", "m", MeasurementType.Time, proportionalToBaseUnit: 24f*365f*1000),
+            new NumberUnit("Day", "d", MeasurementType.Time, proportionalToBaseUnit: 1f/24f),
+            new NumberUnit("Week", "w", MeasurementType.Time, proportionalToBaseUnit: 1f/(24f*7f)),
+            new NumberUnit("Year", "y", MeasurementType.Time, proportionalToBaseUnit: 1f/(24f*365f)),
+            new NumberUnit("Decade", "d", MeasurementType.Time, proportionalToBaseUnit: 1f/(24f*365f*10)),
+            new NumberUnit("Century", "c", MeasurementType.Time, proportionalToBaseUnit: 1f /(24f * 365f * 100)),
+            new NumberUnit("Millenium", "m", MeasurementType.Time, proportionalToBaseUnit: 1f /(24f * 365f * 1000)),
+            // Mass
+            new NumberUnit("Milligram", "mg", MeasurementType.Mass, proportionalToBaseUnit: 1000f),
+            new NumberUnit("Gram", "g", MeasurementType.Mass, baseUnit: true),
+            new NumberUnit("Kilogram", "kg", MeasurementType.Mass, proportionalToBaseUnit: 0.001f),
+            new NumberUnit("Tonne", "t", MeasurementType.Mass, proportionalToBaseUnit: 0.000001f),
+            // Angles
+            new NumberUnit("Radian", "rad", MeasurementType.Angle, proportionalToBaseUnit: MathF.PI/180f),
+            new NumberUnit("Degree", "°", MeasurementType.Angle, baseUnit: true)
         };
         /// <summary>
         /// Gets all the currently available number units
