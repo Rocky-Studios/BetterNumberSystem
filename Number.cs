@@ -141,6 +141,12 @@ namespace BetterNumberSystem
             return outputString;
         }
 
+        /// <summary>
+        /// Converts a number to a different unit
+        /// </summary>
+        /// <param name="unit">The unit to convert to</param>
+        /// <returns>The converted number</returns>
+        /// <exception cref="ArgumentException">Implicit conversion not possible</exception>
         public Number Convert(INumberUnit unit)
         {
             if(MeasurementType != (unit as NumberUnit).MeasurementType)

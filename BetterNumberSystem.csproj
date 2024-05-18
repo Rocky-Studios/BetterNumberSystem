@@ -8,7 +8,7 @@
     <Authors>Rocky Studios</Authors>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <RootNamespace>RockyStudios.BetterNumberSystem</RootNamespace>
+    <RootNamespace>BetterNumberSystem</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
