@@ -4,13 +4,14 @@
     {
         public static void Main(string[] args)
         {
-            Number myNum = Number.Parse("100000km Length");
             Number myNum2 = new Number(
-                15.2354,
-                MeasurementType.Speed,
-                PerNumberUnit.GetPerNumberUnitByFullName("Metre Per Second")
+                60,
+                MeasurementType.Length,
+                NumberUnit.GetNumberUnitByFullName("Metre")
                 );
             Console.WriteLine(myNum2);
+            Number myNum2Cm = myNum2.Convert(NumberUnit.GetNumberUnitByFullName("Centimetre"));
+            Console.WriteLine(myNum2Cm);
         }
     }
 }

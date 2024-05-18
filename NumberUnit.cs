@@ -45,10 +45,10 @@
         {
             new NumberUnit("Plain", "", MeasurementType.Plain, baseUnit: true),
             // Length
-            new NumberUnit("Millimetre", "mm", MeasurementType.Length, proportionalToBaseUnit: 0.001),
-            new NumberUnit("Centimetre", "cm", MeasurementType.Length, proportionalToBaseUnit: 0.01),
+            new NumberUnit("Millimetre", "mm", MeasurementType.Length, proportionalToBaseUnit: 1000),
+            new NumberUnit("Centimetre", "cm", MeasurementType.Length, proportionalToBaseUnit: 100),
             new NumberUnit("Metre", "m", MeasurementType.Length, baseUnit: true),
-            new NumberUnit("Kilometre", "km", MeasurementType.Length, proportionalToBaseUnit: 1000),
+            new NumberUnit("Kilometre", "km", MeasurementType.Length, proportionalToBaseUnit: 0.001f),
             // Time
             new NumberUnit("Millisecond", "ms", MeasurementType.Time, proportionalToBaseUnit: 3600000f),
             new NumberUnit("Second", "s", MeasurementType.Time, proportionalToBaseUnit: 3600f),

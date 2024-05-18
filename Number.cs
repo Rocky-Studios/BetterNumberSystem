@@ -141,6 +141,16 @@ namespace RockyStudios.BetterNumberSystem
             return outputString;
         }
 
+        public Number Convert(INumberUnit unit)
+        {
+            if(MeasurementType != (unit as NumberUnit).MeasurementType)
+            {
+                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + (unit as NumberUnit).MeasurementType + ". Did you intend to use a math function?");
+            }
+            double scale = (unit as NumberUnit).ProportionToBaseUnit / (Unit as NumberUnit).ProportionToBaseUnit;
+            return new Number(((double)NumericValue) * scale, MeasurementType, unit);
+        }
+
         private static string ToScientificNotation(decimal number)
         {
             int exponent = (int)Math.Floor(Math.Log10(Math.Abs((double)number)));
