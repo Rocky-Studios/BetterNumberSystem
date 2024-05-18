@@ -261,6 +261,46 @@ namespace BetterNumberSystem
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue <= bConverted.NumericValue;
         }
+        /// <summary>
+        /// Adds two numbers, giving the output in terms of the first number
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static Number operator + (Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                throw new ArgumentException("Cannot add numbers with different measurement types");
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return new Number(
+                (double)(a.NumericValue + bConverted.NumericValue),
+                a.MeasurementType,
+                a.Unit
+                );
+        }
+        /// <summary>
+        /// Subtracts two numbers, giving the output in terms of the first number
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static Number operator -(Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                throw new ArgumentException("Cannot add numbers with different measurement types");
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return new Number(
+                (double)(a.NumericValue - bConverted.NumericValue),
+                a.MeasurementType,
+                a.Unit
+                );
+        }
     }
     /// <summary>
     /// The different categories that a number can be grouped into

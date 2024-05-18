@@ -12,12 +12,11 @@
             Number myNum2 = new Number(
                 50,
                 MeasurementType.Volume,
-                NumberUnit.GetNumberUnitByFullName("CuMetre")
+                NumberUnit.GetNumberUnitByFullName("Litre")
                 );
+            Console.WriteLine(myNum);
             Console.WriteLine(myNum2);
-            Number myNum2Cm = myNum2.Convert(NumberUnit.GetNumberUnitByFullName("Litre"));
-            Console.WriteLine(myNum2Cm);
-            Console.WriteLine(myNum2 <= myNum2Cm);
+            Console.WriteLine(myNum + myNum2);
         }
     }
 }
