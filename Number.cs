@@ -201,6 +201,66 @@ namespace BetterNumberSystem
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue != bConverted.NumericValue;
         }
+        /// <summary>
+        /// Whether number a is greater than number b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator >(Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                return false;
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return a.NumericValue > bConverted.NumericValue;
+        }
+        /// <summary>
+        /// Whether number a is less than number b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator <(Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                return false;
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return a.NumericValue < bConverted.NumericValue;
+        }
+        /// <summary>
+        /// Whether number a is greater than or equal to number b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator >=(Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                return false;
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return a.NumericValue >= bConverted.NumericValue;
+        }
+        /// <summary>
+        /// Whether number a is less than or equal to number b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator <=(Number a, Number b)
+        {
+            if (a.MeasurementType != b.MeasurementType)
+            {
+                return false;
+            }
+            Number bConverted = b.Convert(a.Unit);
+            return a.NumericValue <= bConverted.NumericValue;
+        }
     }
     /// <summary>
     /// The different categories that a number can be grouped into
