@@ -1,4 +1,4 @@
-﻿namespace RockyStudios.BetterNumberSystem
+﻿namespace BetterNumberSystem
 {
     /// <summary>
     /// A singular unit of measurement

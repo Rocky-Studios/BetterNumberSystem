@@ -1,4 +1,4 @@
-﻿namespace RockyStudios.BetterNumberSystem
+﻿namespace BetterNumberSystem
 {
     /// <summary>
     /// A unit of measurement with two smaller units eg. km/h

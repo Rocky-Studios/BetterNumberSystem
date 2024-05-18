@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace RockyStudios.BetterNumberSystem
+namespace BetterNumberSystem
 {
     /// <summary>
     /// The universal class for all measurements in the Better Number System

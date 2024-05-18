@@ -1,4 +1,4 @@
-﻿namespace RockyStudios.BetterNumberSystem
+﻿namespace BetterNumberSystem
 {
     internal class Program
     {
