@@ -53,12 +53,12 @@
             new NumberUnit("Millimetre", "mm", MeasurementType.Length, proportionalToBaseUnit: 1000),
             new NumberUnit("Centimetre", "cm", MeasurementType.Length, proportionalToBaseUnit: 100),
             new NumberUnit("Metre", "m", MeasurementType.Length, baseUnit: true),
-            new NumberUnit("Kilometre", "km", MeasurementType.Length, proportionalToBaseUnit: 0.001f),
+            new NumberUnit("Kilometre", "Km", MeasurementType.Length, proportionalToBaseUnit: 0.001f),
             // Area
             new NumberUnit("SqMillimetre", "mm²", MeasurementType.Area, proportionalToBaseUnit: 1000000),
             new NumberUnit("SqCentimetre", "cm²", MeasurementType.Area, proportionalToBaseUnit: 10000),
             new NumberUnit("SqMetre", "m²", MeasurementType.Area, baseUnit: true),
-            new NumberUnit("SqKilometre", "km²", MeasurementType.Area, proportionalToBaseUnit: 0.000001f),
+            new NumberUnit("SqKilometre", "Km²", MeasurementType.Area, proportionalToBaseUnit: 0.000001f),
             new NumberUnit("Hectare", "ha", MeasurementType.Area, proportionalToBaseUnit: 0.0001f),
             // Volume
             new NumberUnit("CuMillimetre", "mm³", MeasurementType.Volume, proportionalToBaseUnit: 1000000000),
@@ -67,7 +67,7 @@
             new NumberUnit("CuKilometre", "km³", MeasurementType.Volume, proportionalToBaseUnit: 0.000000001f),
             new NumberUnit("Millilitre", "ml", MeasurementType.Volume, proportionalToBaseUnit: 1000000f),
             new NumberUnit("Litre", "l", MeasurementType.Volume, proportionalToBaseUnit: 1000f),
-            new NumberUnit("Kilolitre", "kl", MeasurementType.Volume, proportionalToBaseUnit: 1f),
+            new NumberUnit("Kilolitre", "Kl", MeasurementType.Volume, proportionalToBaseUnit: 1f),
             // Time
             new NumberUnit("Millisecond", "ms", MeasurementType.Time, proportionalToBaseUnit: 3600000f),
             new NumberUnit("Second", "s", MeasurementType.Time, proportionalToBaseUnit: 3600f),
@@ -82,15 +82,15 @@
             // Mass
             new NumberUnit("Milligram", "mg", MeasurementType.Mass, proportionalToBaseUnit: 1000f),
             new NumberUnit("Gram", "g", MeasurementType.Mass, baseUnit: true),
-            new NumberUnit("Kilogram", "kg", MeasurementType.Mass, proportionalToBaseUnit: 0.001f),
+            new NumberUnit("Kilogram", "Kg", MeasurementType.Mass, proportionalToBaseUnit: 0.001f),
             new NumberUnit("Tonne", "t", MeasurementType.Mass, proportionalToBaseUnit: 0.000001f),
             // Angles
             new NumberUnit("Radian", "rad", MeasurementType.Angle, proportionalToBaseUnit: MathF.PI/180f, canBeNegative: true),
             new NumberUnit("Degree", "°", MeasurementType.Angle, baseUnit: true, canBeNegative: true),
             // Energy
             new NumberUnit("Joule", "j", measurementType: MeasurementType.Energy, baseUnit: true),
-            new NumberUnit("Kilojoule", "j", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.001f),
-            new NumberUnit("Megajoule", "j", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.000001f),
+            new NumberUnit("Kilojoule", "Kj", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.001f),
+            new NumberUnit("Megajoule", "Mj", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.000001f),
             new NumberUnit("Calorie", "cal", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.23912f),
         };
         /// <summary>
