@@ -86,7 +86,12 @@
             new NumberUnit("Tonne", "t", MeasurementType.Mass, proportionalToBaseUnit: 0.000001f),
             // Angles
             new NumberUnit("Radian", "rad", MeasurementType.Angle, proportionalToBaseUnit: MathF.PI/180f, canBeNegative: true),
-            new NumberUnit("Degree", "°", MeasurementType.Angle, baseUnit: true, canBeNegative: true)
+            new NumberUnit("Degree", "°", MeasurementType.Angle, baseUnit: true, canBeNegative: true),
+            // Energy
+            new NumberUnit("Joule", "j", measurementType: MeasurementType.Energy, baseUnit: true),
+            new NumberUnit("Kilojoule", "j", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.001f),
+            new NumberUnit("Megajoule", "j", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.000001f),
+            new NumberUnit("Calorie", "cal", measurementType: MeasurementType.Energy, proportionalToBaseUnit: 0.23912f),
         };
         /// <summary>
         /// Gets all the currently available number units

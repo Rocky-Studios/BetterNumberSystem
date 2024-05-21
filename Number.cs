@@ -364,5 +364,9 @@ namespace BetterNumberSystem
         /// A number representing an amount of time
         /// </summary>
         Time,
+        /// <summary>
+        /// A number representing an amount of energy
+        /// </summary>
+        Energy
     }
 }
