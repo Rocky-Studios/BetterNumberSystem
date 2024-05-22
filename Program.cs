@@ -5,18 +5,19 @@
         public static void Main(string[] args)
         {
             Number myNum = new Number(
-                -50,
-                MeasurementType.Angle,
-                NumberUnit.GetNumberUnitByFullName("Degree")
+                5,
+                MeasurementType.Length,
+                NumberUnit.GetNumberUnitByFullName("Metre")
                 );
             Number myNum2 = new Number(
-                60,
-                MeasurementType.Angle,
-                NumberUnit.GetNumberUnitByFullName("Degree")
+                50,
+                MeasurementType.Length,
+                NumberUnit.GetNumberUnitByFullName("Metre")
                 );
             Console.WriteLine(myNum);
             Console.WriteLine(myNum2);
-            Console.WriteLine(myNum - myNum2);
+            Console.WriteLine(myNum2 * myNum);
+            Console.WriteLine((myNum2 * myNum) * myNum);
         }
     }
 }

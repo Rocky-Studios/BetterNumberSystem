@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace BetterNumberSystem
 {
@@ -12,7 +13,7 @@ namespace BetterNumberSystem
         /// <summary>
         /// The numerical value of the number
         /// </summary>
-        public decimal NumericValue = 0;
+        public double NumericValue = 0;
 
         /// <summary>
         /// The measurement category
@@ -42,7 +43,7 @@ namespace BetterNumberSystem
         public Number(double numericValue, MeasurementType measurementType, INumberUnit unit)
         {
             if (numericValue < 0 && !unit.CanBeNegative) throw new Exception(unit.FullName + " cannot be negative");
-            NumericValue = (decimal)numericValue;
+            NumericValue = (double)numericValue;
             MeasurementType = measurementType;
             Unit = unit;
         }
@@ -68,7 +69,7 @@ namespace BetterNumberSystem
             Number output = new Number();
 
             // Numerical value
-            decimal numericValue = System.Convert.ToDecimal(match.Groups[1].Value);
+            double numericValue = System.Convert.ToDouble(match.Groups[1].Value);
             output.NumericValue = numericValue;
 
             // Measurement type
@@ -158,15 +159,15 @@ namespace BetterNumberSystem
             return new Number(((double)NumericValue) * scale, MeasurementType, unit);
         }
 
-        private static string ToScientificNotation(decimal number)
+        private static string ToScientificNotation(double number)
         {
             int exponent = (int)Math.Floor(Math.Log10(Math.Abs((double)number)));
             double mantissa = (double)number / Math.Pow(10, exponent);
             string mantissaStr = mantissa.ToString("R");
-            int decimalIndex = mantissaStr.IndexOf('.');
-            if (decimalIndex != -1 && mantissaStr.Length - decimalIndex - 1 > 10)
+            int doubleIndex = mantissaStr.IndexOf('.');
+            if (doubleIndex != -1 && mantissaStr.Length - doubleIndex - 1 > 10)
             {
-                mantissaStr = mantissaStr.Substring(0, decimalIndex + 11);
+                mantissaStr = mantissaStr.Substring(0, doubleIndex + 11);
             }
             return $"{mantissaStr} x 10^{exponent}";
         }
@@ -294,7 +295,7 @@ namespace BetterNumberSystem
         {
             if (a.MeasurementType != b.MeasurementType)
             {
-                throw new ArgumentException("Cannot add numbers with different measurement types");
+                throw new ArgumentException("Cannot subtract numbers with different measurement types");
             }
             Number bConverted = b.Convert(a.Unit);
             if ((double)(a.NumericValue - bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
@@ -303,6 +304,46 @@ namespace BetterNumberSystem
                 a.MeasurementType,
                 a.Unit
                 );
+        }
+
+        public static Number operator *(Number a, Number b)
+        {
+            switch (a.MeasurementType)
+            {
+                case MeasurementType.Length:
+                    if(b.MeasurementType == MeasurementType.Length)
+                    {
+                        return new Number(
+                            (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
+                            MeasurementType.Area,
+                            NumberUnit.GetNumberUnitByFullName("Sq"+a.Unit.FullName)
+                            );
+                    }
+                    else if(b.MeasurementType == MeasurementType.Area)
+                    {
+                        return new Number(
+                            (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
+                            MeasurementType.Volume,
+                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName)
+                            );
+                    }
+                    break;
+                case MeasurementType.Area:
+                    if (b.MeasurementType == MeasurementType.Area)
+                    {
+                        throw new Exception();
+                    }
+                    else if (b.MeasurementType == MeasurementType.Length)
+                    {
+                        return new Number(
+                            (float)(a.NumericValue * a.NumericValue) * ((float)b.Convert(NumberUnit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
+                            MeasurementType.Volume,
+                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", ""))
+                            );
+                    }
+                    break;
+            }
+            throw new NotImplementedException();
         }
     }
     /// <summary>
