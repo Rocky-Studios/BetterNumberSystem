@@ -3,7 +3,7 @@
     /// <summary>
     /// A singular unit of measurement
     /// </summary>
-    public class NumberUnit : INumberUnit
+    public class NumberUnit
     {
         /// <summary>
         /// The full name of the unit eg. Millimetre
@@ -308,12 +308,5 @@
             }
             return null;
         }
-    }
-
-    public interface INumberUnit
-    {
-        string Suffix { get; set; }
-        bool CanBeNegative { get; set; }
-        string FullName { get; set; }
     }
 }

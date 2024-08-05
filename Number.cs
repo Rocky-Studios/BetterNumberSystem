@@ -23,7 +23,7 @@ namespace BetterNumberSystem
         /// <summary>
         /// The measurement unit
         /// </summary>
-        public INumberUnit Unit = NumberUnit.GetNumberUnitByFullName("Plain");
+        public NumberUnit Unit = NumberUnit.PLAIN;
 
         /// <summary>
         /// Generates a plain number (0)
@@ -32,7 +32,7 @@ namespace BetterNumberSystem
         {
             NumericValue = 0;
             MeasurementType = MeasurementType.Plain;
-            Unit = NumberUnit.GetNumberUnitByFullName("Plain");
+            Unit = NumberUnit.PLAIN;
         }
         /// <summary>
         /// Generates a number with custom parameters
@@ -40,14 +40,14 @@ namespace BetterNumberSystem
         /// <param name="numericValue">The numerical value of the number</param>
         /// <param name="measurementType">The category of measurement</param>
         /// <param name="unit">The unit of measurement</param>
-        public Number(double numericValue, MeasurementType measurementType, INumberUnit unit)
+        public Number(double numericValue = 0, MeasurementType? measurementType = MeasurementType.Plain, NumberUnit? unit = null)
         {
-            if (numericValue < 0 && !unit.CanBeNegative) throw new Exception(unit.FullName + " cannot be negative");
-            NumericValue = (double)numericValue;
-            MeasurementType = measurementType;
-            Unit = unit;
-        }
+            if (unit == null) Unit = NumberUnit.PLAIN;
+            else Unit = unit;
 
+            if (numericValue < 0 && !Unit.CanBeNegative) throw new ArgumentException(Unit.FullName + " cannot be negative");
+            else NumericValue = numericValue;
+        }
 
         /// <summary>
         /// Converts a string of number data into the Number class
@@ -149,14 +149,14 @@ namespace BetterNumberSystem
         /// <param name="unit">The unit to convert to</param>
         /// <returns>The converted number</returns>
         /// <exception cref="ArgumentException">Implicit conversion not possible</exception>
-        public Number Convert(INumberUnit unit)
+        public Number Convert(NumberUnit unit)
         {
             if(MeasurementType != (unit as NumberUnit).MeasurementType)
             {
-                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + (unit as NumberUnit).MeasurementType + ". Did you intend to use a math function?");
+                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + Unit.MeasurementType + ". Did you intend to use a math function?");
             }
-            double scale = (unit as NumberUnit).ProportionToBaseUnit / (Unit as NumberUnit).ProportionToBaseUnit;
-            return new Number(((double)NumericValue) * scale, MeasurementType, unit);
+            double scale = unit.ProportionToBaseUnit / (Unit as NumberUnit).ProportionToBaseUnit;
+            return new Number((NumericValue) * scale, MeasurementType, unit);
         }
 
         private static string ToScientificNotation(double number)
@@ -188,6 +188,27 @@ namespace BetterNumberSystem
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue == bConverted.NumericValue;
         }
+        /// <summary>
+        /// Whether two objects (have to be numbers) have equal value
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is Number)
+                return (obj as Number) == this;
+            else return false;
+        }
+
+        /// <summary>
+        /// Returns the hash code for the value of this instance
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return (MeasurementType.GetHashCode() + NumericValue.GetHashCode() - Unit.GetHashCode()) * (MeasurementType.GetHashCode() - NumericValue.GetHashCode() + Unit.GetHashCode());
+        }
+
         /// <summary>
         /// Whether two numbers have different values even when their units are converted
         /// </summary>
