@@ -6,13 +6,11 @@
         {
             Number myNum = new Number(
                 5,
-                MeasurementType.Length,
-                NumberUnit.GetNumberUnitByFullName("Metre")
+                NumberUnit.METRE
                 );
             Number myNum2 = new Number(
                 50,
-                MeasurementType.Length,
-                NumberUnit.GetNumberUnitByFullName("Metre")
+                NumberUnit.METRE
                 );
             Console.WriteLine(myNum);
             Console.WriteLine(myNum2);

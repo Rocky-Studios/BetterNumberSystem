@@ -40,7 +40,7 @@ namespace BetterNumberSystem
         /// <param name="numericValue">The numerical value of the number</param>
         /// <param name="measurementType">The category of measurement</param>
         /// <param name="unit">The unit of measurement</param>
-        public Number(double numericValue = 0, MeasurementType? measurementType = MeasurementType.Plain, NumberUnit? unit = null)
+        public Number(double numericValue = 0, NumberUnit? unit = null, MeasurementType? measurementType = MeasurementType.Plain)
         {
             if (unit == null) Unit = NumberUnit.PLAIN;
             else Unit = unit;
@@ -156,7 +156,7 @@ namespace BetterNumberSystem
                 throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + Unit.MeasurementType + ". Did you intend to use a math function?");
             }
             double scale = unit.ProportionToBaseUnit / (Unit as NumberUnit).ProportionToBaseUnit;
-            return new Number((NumericValue) * scale, MeasurementType, unit);
+            return new Number((NumericValue) * scale, unit, MeasurementType);
         }
 
         private static string ToScientificNotation(double number)
@@ -301,8 +301,8 @@ namespace BetterNumberSystem
             if ((double)(a.NumericValue + bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
             return new Number(
                 (double)(a.NumericValue + bConverted.NumericValue),
-                a.MeasurementType,
-                a.Unit
+                a.Unit,
+                a.MeasurementType
                 );
         }
         /// <summary>
@@ -322,8 +322,8 @@ namespace BetterNumberSystem
             if ((double)(a.NumericValue - bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
             return new Number(
                 (double)(a.NumericValue - bConverted.NumericValue),
-                a.MeasurementType,
-                a.Unit
+                a.Unit,
+                a.MeasurementType
                 );
         }
 
@@ -336,16 +336,16 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
-                            MeasurementType.Area,
-                            NumberUnit.GetNumberUnitByFullName("Sq"+a.Unit.FullName)
+                            NumberUnit.GetNumberUnitByFullName("Sq" + a.Unit.FullName),
+                            MeasurementType.Area
                             );
                     }
                     else if(b.MeasurementType == MeasurementType.Area)
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
-                            MeasurementType.Volume,
-                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName)
+                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName),
+                            MeasurementType.Volume
                             );
                     }
                     break;
@@ -358,8 +358,8 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)(a.NumericValue * a.NumericValue) * ((float)b.Convert(NumberUnit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
-                            MeasurementType.Volume,
-                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", ""))
+                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", "")),
+                            MeasurementType.Volume
                             );
                     }
                     break;
@@ -429,6 +429,55 @@ namespace BetterNumberSystem
         /// <summary>
         /// A number representing an amount of energy
         /// </summary>
-        Energy
+        Energy,
+        /// <summary>
+        /// The amount of times something happens, usually over a fixed amount of time
+        /// </summary>
+        Frequency,
+        /// <summary>
+        /// How much force something is pushing something else by
+        /// </summary>
+        Pressure,
+        /// <summary>
+        /// 
+        /// </summary>
+        Current,
+        /// <summary>
+        /// How fast work is done, or how fast energy is transferred from object to another
+        /// </summary>
+        Power,
+        /// <summary>
+        /// The force making electrical charge move
+        /// </summary>
+        Voltage,
+        /// <summary>
+        /// The capability of a deice to store electric charge
+        /// </summary>
+        Capacitance,
+        /// <summary>
+        /// The difficulty of passing an electric current through a substance (opposite of conductance)
+        /// </summary>
+        Resistance,
+        /// <summary>
+        /// The ease of an electric current passing through a substance (opposite of resistance)
+        /// </summary>
+        Conductance,
+        /// <summary>
+        /// The strength of a field created by a magnet
+        /// </summary>
+        MagneticFieldStrength,
+        /// <summary>
+        /// 
+        /// </summary>
+        Inductance,
+        /// <summary>
+        /// How bright a light is
+        /// </summary>
+        Illuminance,
+        /// <summary>
+        /// 
+        /// </summary>
+        Radioactivity,
+
     }
 }

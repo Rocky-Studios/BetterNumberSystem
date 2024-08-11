@@ -262,6 +262,17 @@
         public static readonly NumberUnit KILOCALORIE = new NumberUnit("Kilocalorie", "kcal", MeasurementType.Energy, proportionalToBaseUnit: 4184f);
         #endregion
 
+        /// <summary>
+        /// <strong>SI Derived Unit</strong> Hertz (hz)<br/>
+        /// How many times something occurs in one second
+        /// </summary>
+        public static readonly NumberUnit HERTZ = new NumberUnit("Hertz", "hz", MeasurementType.Frequency, baseUnit: true);
+
+        /// <summary>
+        /// <strong>SI Derived Unit</strong> Hertz (hz)<br/>
+        /// How many times something occurs in one second
+        /// </summary>
+        public static readonly NumberUnit Pascal = new NumberUnit("Hertz", "hz", MeasurementType.Frequency, baseUnit: true);
 
         /// <summary>
         /// The list of all number units avaiable for use
