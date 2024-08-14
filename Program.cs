@@ -9,7 +9,7 @@
                 UnitManager.Unit["Millimetre"]
                 );
             Console.WriteLine(myNum);
-            Console.WriteLine(myNum.Convert(UnitManager.Unit["Metre"]));
+            Console.WriteLine(myNum.Convert("Metre"));
         }
     }
 }

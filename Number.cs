@@ -146,7 +146,7 @@ namespace BetterNumberSystem
         /// Converts a number to a different unit
         /// </summary>
         /// <param name="targetUnit">The unit to convert to</param>
-        /// <returns>The converted number</returns>
+        /// <returns></returns>
         /// <exception cref="ArgumentException">Implicit conversion not possible</exception>
         public Number Convert(Unit targetUnit)
         {
@@ -162,7 +162,28 @@ namespace BetterNumberSystem
 
             return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
         }
-    
+        /// <summary>
+        /// Converts a number to a different unit
+        /// </summary>
+        /// <param name="unit">The string name of the unit</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public Number Convert(string unit)
+        {
+            Unit targetUnit = UnitManager.Units[unit];
+            if (MeasurementType != (targetUnit as Unit).MeasurementType)
+            {
+                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + targetUnit.MeasurementType + ". Did you intend to use a math function?");
+            }
+
+            double valueInBaseUnit = Unit.ToBaseUnit(NumericValue);
+
+            // Convert from base unit to the target unit
+            double convertedValue = targetUnit.FromBaseUnit(valueInBaseUnit);
+
+            return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
+        }
+
 
         private static string ToScientificNotation(double number)
         {
