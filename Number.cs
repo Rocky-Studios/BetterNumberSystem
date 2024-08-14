@@ -23,7 +23,7 @@ namespace BetterNumberSystem
         /// <summary>
         /// The measurement unit
         /// </summary>
-        public NumberUnit Unit = NumberUnit.PLAIN;
+        public Unit Unit = UnitManager.Unit["Plain"];
 
         /// <summary>
         /// Generates a plain number (0)
@@ -32,7 +32,7 @@ namespace BetterNumberSystem
         {
             NumericValue = 0;
             MeasurementType = MeasurementType.Plain;
-            Unit = NumberUnit.PLAIN;
+            Unit = UnitManager.Unit["Plain"];
         }
         /// <summary>
         /// Generates a number with custom parameters
@@ -40,11 +40,10 @@ namespace BetterNumberSystem
         /// <param name="numericValue">The numerical value of the number</param>
         /// <param name="measurementType">The category of measurement</param>
         /// <param name="unit">The unit of measurement</param>
-        public Number(double numericValue = 0, NumberUnit? unit = null, MeasurementType? measurementType = MeasurementType.Plain)
+        public Number(double numericValue = 0, Unit? unit = null, MeasurementType? measurementType = null)
         {
-            if (unit == null) Unit = NumberUnit.PLAIN;
-            else Unit = unit;
-
+            Unit = unit ?? UnitManager.Unit["Plain"];
+            MeasurementType = measurementType ?? unit.MeasurementType;
             if (numericValue < 0 && !Unit.CanBeNegative) throw new ArgumentException(Unit.FullName + " cannot be negative");
             else NumericValue = numericValue;
         }
@@ -79,7 +78,7 @@ namespace BetterNumberSystem
             output.MeasurementType = parsedMeasurementType;
 
             // Unit
-            NumberUnit parsedNumberUnit = NumberUnit.GetNumberUnitBySuffix(match.Groups[3].Value);
+            Unit parsedNumberUnit = Unit.GetNumberUnitBySuffix(match.Groups[3].Value);
             if (parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
             output.Unit = parsedNumberUnit;
 
@@ -146,18 +145,24 @@ namespace BetterNumberSystem
         /// <summary>
         /// Converts a number to a different unit
         /// </summary>
-        /// <param name="unit">The unit to convert to</param>
+        /// <param name="targetUnit">The unit to convert to</param>
         /// <returns>The converted number</returns>
         /// <exception cref="ArgumentException">Implicit conversion not possible</exception>
-        public Number Convert(NumberUnit unit)
+        public Number Convert(Unit targetUnit)
         {
-            if(MeasurementType != (unit as NumberUnit).MeasurementType)
+            if(MeasurementType != (targetUnit as Unit).MeasurementType)
             {
-                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + Unit.MeasurementType + ". Did you intend to use a math function?");
+                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + targetUnit.MeasurementType + ". Did you intend to use a math function?");
             }
-            double scale = unit.ProportionToBaseUnit / (Unit as NumberUnit).ProportionToBaseUnit;
-            return new Number((NumericValue) * scale, unit, MeasurementType);
+
+            double valueInBaseUnit = Unit.ToBaseUnit(NumericValue);
+
+            // Convert from base unit to the target unit
+            double convertedValue = targetUnit.FromBaseUnit(valueInBaseUnit);
+
+            return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
         }
+    
 
         private static string ToScientificNotation(double number)
         {
@@ -336,7 +341,7 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
-                            NumberUnit.GetNumberUnitByFullName("Sq" + a.Unit.FullName),
+                            Unit.GetNumberUnitByFullName("Sq" + a.Unit.FullName),
                             MeasurementType.Area
                             );
                     }
@@ -344,7 +349,7 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
-                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName),
+                            Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName),
                             MeasurementType.Volume
                             );
                     }
@@ -357,8 +362,8 @@ namespace BetterNumberSystem
                     else if (b.MeasurementType == MeasurementType.Length)
                     {
                         return new Number(
-                            (float)(a.NumericValue * a.NumericValue) * ((float)b.Convert(NumberUnit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
-                            NumberUnit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", "")),
+                            (float)(a.NumericValue * a.NumericValue) * ((float)b.Convert(Unit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
+                            Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", "")),
                             MeasurementType.Volume
                             );
                     }
@@ -447,6 +452,10 @@ namespace BetterNumberSystem
         /// </summary>
         Power,
         /// <summary>
+        /// 
+        /// </summary>
+        ElectricCharge,
+        /// <summary>
         /// The force making electrical charge move
         /// </summary>
         Voltage,
@@ -462,6 +471,10 @@ namespace BetterNumberSystem
         /// The ease of an electric current passing through a substance (opposite of resistance)
         /// </summary>
         Conductance,
+        /// <summary>
+        /// 
+        /// </summary>
+        MagneticFlux,
         /// <summary>
         /// The strength of a field created by a magnet
         /// </summary>

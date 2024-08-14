@@ -5,17 +5,11 @@
         public static void Main(string[] args)
         {
             Number myNum = new Number(
-                5,
-                NumberUnit.METRE
-                );
-            Number myNum2 = new Number(
-                50,
-                NumberUnit.METRE
+                15,
+                UnitManager.Unit["Millimetre"]
                 );
             Console.WriteLine(myNum);
-            Console.WriteLine(myNum2);
-            Console.WriteLine(myNum2 * myNum);
-            Console.WriteLine((myNum2 * myNum) * myNum);
+            Console.WriteLine(myNum.Convert(UnitManager.Unit["Metre"]));
         }
     }
 }
