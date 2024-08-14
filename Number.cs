@@ -8,8 +8,7 @@ namespace BetterNumberSystem
     /// </summary>
     public class Number
     {
-        // =========== CLASS VARIABLES ===========
-
+        #region Fields
         /// <summary>
         /// The numerical value of the number
         /// </summary>
@@ -24,7 +23,8 @@ namespace BetterNumberSystem
         /// The measurement unit
         /// </summary>
         public Unit Unit = UnitManager.Unit["Plain"];
-
+        #endregion
+        #region Constructors
         /// <summary>
         /// Generates a plain number (0)
         /// </summary>
@@ -47,7 +47,7 @@ namespace BetterNumberSystem
             if (numericValue < 0 && !Unit.CanBeNegative) throw new ArgumentException(Unit.FullName + " cannot be negative");
             else NumericValue = numericValue;
         }
-
+        #endregion
         /// <summary>
         /// Converts a string of number data into the Number class
         /// </summary>
@@ -94,7 +94,6 @@ namespace BetterNumberSystem
             return Get(unit: true, type: true);
         }
 
-        // ========= GET METHODS ===========
         /// <summary>
         /// Display the number class as text
         /// </summary>
@@ -142,6 +141,7 @@ namespace BetterNumberSystem
             return outputString;
         }
 
+        #region Convert
         /// <summary>
         /// Converts a number to a different unit
         /// </summary>
@@ -183,7 +183,7 @@ namespace BetterNumberSystem
 
             return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
         }
-
+        #endregion
 
         private static string ToScientificNotation(double number)
         {
@@ -198,7 +198,7 @@ namespace BetterNumberSystem
             return $"{mantissaStr} x 10^{exponent}";
         }
 
-        // ========= MATH METHODS ===========
+        #region Logic
         /// <summary>
         /// Whether two numbers have the same value when their units are converted
         /// </summary>
@@ -310,6 +310,8 @@ namespace BetterNumberSystem
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue <= bConverted.NumericValue;
         }
+        #endregion
+        #region Math
         /// <summary>
         /// Adds two numbers, giving the output in terms of the first number
         /// </summary>
@@ -392,126 +394,6 @@ namespace BetterNumberSystem
             }
             throw new NotImplementedException();
         }
-    }
-    /// <summary>
-    /// The different categories that a number can be grouped into
-    /// </summary>
-    public enum MeasurementType
-    {
-        /// <summary>
-        /// A number with no unit
-        /// </summary>
-        Plain,
-
-        /// <summary>
-        /// A number representing length in space
-        /// </summary>
-        Length,
-
-        /// <summary>
-        /// A number representing area on a surface
-        /// </summary>
-        Area,
-
-        /// <summary>
-        /// A number representing a quantity of 3D space
-        /// </summary>
-        Volume,
-
-        /// <summary>
-        /// A number representing distance travelled over time
-        /// </summary>
-        Speed,
-
-        /// <summary>
-        /// A number representing the temperature of particles
-        /// </summary>
-        Temperature,
-
-        /// <summary>
-        /// A number representing the angle between two lines or surfaces
-        /// </summary>
-        Angle,
-
-        /// <summary>
-        /// A number representing an object's total mass
-        /// </summary>
-        Mass,
-
-        /// <summary>
-        /// An object representing the average mass per a unit of space
-        /// </summary>
-        Density,
-
-        /// <summary>
-        /// A number representing a force acting on an object
-        /// </summary>
-        Force,
-
-        /// <summary>
-        /// A number representing an amount of time
-        /// </summary>
-        Time,
-        /// <summary>
-        /// A number representing an amount of energy
-        /// </summary>
-        Energy,
-        /// <summary>
-        /// The amount of times something happens, usually over a fixed amount of time
-        /// </summary>
-        Frequency,
-        /// <summary>
-        /// How much force something is pushing something else by
-        /// </summary>
-        Pressure,
-        /// <summary>
-        /// 
-        /// </summary>
-        Current,
-        /// <summary>
-        /// How fast work is done, or how fast energy is transferred from object to another
-        /// </summary>
-        Power,
-        /// <summary>
-        /// 
-        /// </summary>
-        ElectricCharge,
-        /// <summary>
-        /// The force making electrical charge move
-        /// </summary>
-        Voltage,
-        /// <summary>
-        /// The capability of a deice to store electric charge
-        /// </summary>
-        Capacitance,
-        /// <summary>
-        /// The difficulty of passing an electric current through a substance (opposite of conductance)
-        /// </summary>
-        Resistance,
-        /// <summary>
-        /// The ease of an electric current passing through a substance (opposite of resistance)
-        /// </summary>
-        Conductance,
-        /// <summary>
-        /// 
-        /// </summary>
-        MagneticFlux,
-        /// <summary>
-        /// The strength of a field created by a magnet
-        /// </summary>
-        MagneticFieldStrength,
-        /// <summary>
-        /// 
-        /// </summary>
-        Inductance,
-        /// <summary>
-        /// How bright a light is
-        /// </summary>
-        Illuminance,
-        /// <summary>
-        /// 
-        /// </summary>
-        Radioactivity,
-
+        #endregion
     }
 }
