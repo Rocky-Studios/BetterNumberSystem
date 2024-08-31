@@ -43,6 +43,57 @@ namespace BetterNumberSystem.Expression
     /// The computations that happen when a function is evaluated
     /// </summary>
     public delegate IExpressionValue MathFunction(IExpressionValue[] inputs);
+
+    public class ExpressionFunctionInputs : IExpressionPart
+    {
+        /// <summary>
+        /// How many inputs this function can take <br/>
+        /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property
+        /// </summary>
+        public ExpressionFunctionInputAmount InputType;
+        /// <summary>
+        /// The inputs for this function <br/>
+        /// NOTE: the last input will be used for functions that take an infinite amount of inputs
+        /// </summary>
+        public List<ExpressionFunctionInput> Inputs = [];
+    }
+    /// <summary>
+    /// How many inputs a function can take <br/>
+    /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property
+    /// </summary>
+    public struct ExpressionFunctionInputAmount
+    {
+        public bool One = false;
+        public bool Two = true;
+        public bool Three = false;
+        public bool Infinite = false;
+
+        public ExpressionFunctionInputAmount(bool one, bool two, bool three, bool infinite)
+        {
+            One = one;
+            Two = two;
+            Three = three;
+            Infinite = infinite;
+        }
+    }
+
+    /// <summary>
+    /// Describes an input for a function
+    /// </summary>
+    /// <param name="name">The name used to identify this input</param>
+    /// <param name="identityValue">The identity value, such that when it is the first input in a two input function, the function will return the second input eg. the multiplicative identity is 1 because 1 × x = x</param>
+    public struct ExpressionFunctionInput(string? name, ExpressionGroup? identityValue)
+    {
+        /// <summary>
+        /// The name used to identify this input
+        /// </summary>
+        public string? Name = name;
+        /// <summary>
+        /// The identity value, such that when it is the first input in a two input function, the function will return the second input eg. the multiplicative identity is 1 because 1 × x = x
+        /// </summary>
+        public ExpressionGroup? Value = identityValue;
+    }
+
     /// <summary>
     /// The solver will prioritize things inside this group (basically acts like brackets)
     /// </summary>
