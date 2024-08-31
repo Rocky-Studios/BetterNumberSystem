@@ -29,6 +29,8 @@ namespace BetterNumberSystem
             Number YConverted = Y.Convert(X.Unit);
             return new Number(Math.Sqrt(X.NumericValue * X.NumericValue + YConverted.NumericValue * YConverted.NumericValue), X.Unit);
         }
+
+        public Matrix ToMatrix();
     }
     /// <summary>
     /// A 2D quantity with both direction and magnitude
@@ -56,6 +58,14 @@ namespace BetterNumberSystem
         {
             Number YConverted = Y.Convert(X.Unit);
             return new Number(Math.Sqrt(X.NumericValue * X.NumericValue + YConverted.NumericValue * YConverted.NumericValue), X.Unit);
+        }
+
+        public Matrix ToMatrix()
+        {
+            Matrix output = new(2,1);
+            output[1,1] = X;
+            output[2,1] = Y;
+            return output;
         }
     }
     /// <summary>
@@ -100,6 +110,15 @@ namespace BetterNumberSystem
                 (YConverted.NumericValue * YConverted.NumericValue +
                 ZConverted.NumericValue * ZConverted.NumericValue
                 )), X.Unit);
+        }
+
+        public Matrix ToMatrix()
+        {
+            Matrix output = new(3, 1);
+            output[1, 1] = X;
+            output[2, 1] = Y;
+            output[3, 1] = Z;
+            return output;
         }
     }
 }
