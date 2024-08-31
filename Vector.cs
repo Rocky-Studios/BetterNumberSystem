@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BetterNumberSystem.Expression;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BetterNumberSystem
 {
-    public interface IVector
+    public interface IVector : IExpressionValue
     {
         public Number X { get; set; }
         public Number Y { get; set; }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using BetterNumberSystem.Expression;
 
 namespace BetterNumberSystem
 {
     /// <summary>
     /// The universal class for all measurements in the Better Number System
     /// </summary>
-    public class Number
+    public class Number : IExpressionValue
     {
         #region Fields
         /// <summary>
