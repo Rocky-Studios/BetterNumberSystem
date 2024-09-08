@@ -23,7 +23,7 @@ namespace BetterNumberSystem.Expression
             ExpressionGroup output = new();
 
             foreach (IExpressionPart part in Parts)
-                if (part is ExpressionFunction) functions.Push(part as ExpressionFunction);
+                if (part is ExpressionFunction function) functions.Push(function);
             
             while (functions.Count > 0)
             {

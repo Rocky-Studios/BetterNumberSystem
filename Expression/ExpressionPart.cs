@@ -134,13 +134,13 @@ namespace BetterNumberSystem.Expression
             {
                 foreach (IExpressionPart part in input.Parts)
                 {
-                    if (part is ExpressionFunction)
+                    if (part is ExpressionFunction function)
                     {
                         throw new NotImplementedException();
                     }
-                    else if (part is ExpressionTerm)
+                    else if (part is ExpressionTerm term)
                     {
-                        terms.Add(part as ExpressionTerm);
+                        terms.Add(term);
                     }
                 }
             }
