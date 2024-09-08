@@ -16,33 +16,7 @@ namespace BetterNumberSystem
                 Symbol = "+",
                 Function = inputs =>
                 {
-                    List<ExpressionTerm> terms = [];
-                    LikeTermsCollection likeTerms = new();
-                    foreach (ExpressionGroup input in inputs)
-                    {
-                        foreach (IExpressionPart part in input.Parts)
-                        {
-                            if(part is ExpressionFunction)
-                            {
-                                throw new NotImplementedException();
-                            }
-                            else if (part is ExpressionTerm)
-                            {
-                                terms.Add(part as ExpressionTerm);
-                            }
-                        }
-                    }
-                    foreach (var term in terms)
-                    {
-                        List<Pronumeral> pronumerals = term.Pronumerals;
-
-                        if (!likeTerms.ContainsKey(pronumerals))
-                        {
-                            likeTerms[pronumerals] = new List<ExpressionTerm>();
-                        }
-
-                        likeTerms[pronumerals].Add(term);
-                    }
+                    LikeTermsCollection likeTerms = ExpressionGroup.ToLikeTermsCollection(inputs);
 
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
                     foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)

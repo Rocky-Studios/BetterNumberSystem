@@ -120,5 +120,43 @@ namespace BetterNumberSystem.Expression
             }
             return output;
         }
+        /// <summary>
+        /// Converts multiple (or one) expression group to a collection of like terms
+        /// </summary>
+        /// <param name="expressionGroups"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException">Nested function simplification not implemented yet</exception>
+        public static LikeTermsCollection ToLikeTermsCollection(ExpressionGroup[] expressionGroups)
+        {
+            List<ExpressionTerm> terms = [];
+            LikeTermsCollection likeTerms = [];
+            foreach (ExpressionGroup input in expressionGroups)
+            {
+                foreach (IExpressionPart part in input.Parts)
+                {
+                    if (part is ExpressionFunction)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else if (part is ExpressionTerm)
+                    {
+                        terms.Add(part as ExpressionTerm);
+                    }
+                }
+            }
+            foreach (var term in terms)
+            {
+                List<Pronumeral> pronumerals = term.Pronumerals;
+
+                if (!likeTerms.TryGetValue(pronumerals, out List<ExpressionTerm>? value))
+                {
+                    value = [];
+                    likeTerms[pronumerals] = value;
+                }
+
+                value.Add(term);
+            }
+            return likeTerms;
+        }
     }
 }
