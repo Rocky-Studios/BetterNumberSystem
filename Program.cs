@@ -10,30 +10,62 @@ namespace BetterNumberSystem
                 15,
                 UnitManager.Unit["Millimetre"]
                 );
-            Console.WriteLine(myNum);
             ExpressionFunction add = new ExpressionFunction()
             {
                 Name = "Sum",
                 Symbol = "+",
                 Function = inputs =>
                 {
-                    for (int i = 0; i < inputs.Length - 1; i++)
+                    List<ExpressionTerm> terms = [];
+                    Dictionary<List<Pronumeral>, List<ExpressionTerm>> likeTerms = new Dictionary<List<Pronumeral>, List<ExpressionTerm>>(new PronumeralListEqualityComparer());
+                    foreach (ExpressionGroup input in inputs)
                     {
-                        IExpressionValue current = inputs[i];
-                        IExpressionValue next = inputs[i++];
-
-                        if (current.GetType() != next.GetType()) throw new Exception("Different types!");
+                        foreach (IExpressionPart part in input.Parts)
+                        {
+                            if(part is ExpressionFunction)
+                            {
+                                throw new NotImplementedException();
+                            }
+                            else if (part is ExpressionTerm)
+                            {
+                                terms.Add(part as ExpressionTerm);
+                            }
+                        }
                     }
-                    if (inputs[0] is not Number) throw new NotImplementedException();
-
-                    Number result = new Number(0, (inputs[0] as Number).Unit);
-
-                    foreach (IExpressionValue value in inputs)
+                    foreach (var term in terms)
                     {
-                        result.NumericValue += (value as Number).Convert(result.Unit).NumericValue;
+                        List<Pronumeral> pronumerals = term.Pronumerals;
+
+                        if (!likeTerms.ContainsKey(pronumerals))
+                        {
+                            likeTerms[pronumerals] = new List<ExpressionTerm>();
+                        }
+
+                        likeTerms[pronumerals].Add(term);
                     }
 
-                    return result;
+                    // Assuming we're only dealing with numbers (no vectors or matrices yet)
+                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                        foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
+                            if (expressionTerm.Value is not Number) throw new NotImplementedException();
+
+                    ExpressionGroup output = new();
+
+                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    {
+                        List<Pronumeral> pronumerals = likeTermCollection.Key;
+                        Number total = new(0, (likeTermCollection.Value[0].Value as Number).Unit);
+
+                        foreach (ExpressionTerm t in likeTermCollection.Value)
+                        {
+                            Number n = t.Value as Number;
+                            Number nConverted = n.Convert(total.Unit);
+                            total.NumericValue += nConverted.NumericValue;
+                        }
+
+                        output.Parts.Add(new ExpressionTerm() { Value = total, Pronumerals = pronumerals});
+                    }
+                    return output;
                 }
             };
 
@@ -47,14 +79,16 @@ namespace BetterNumberSystem
                         {
                             Parts = [new ExpressionTerm()
                             {
-                                Value = myNum
+                                Value = myNum,
+                                Pronumerals = [Pronumeral.NO_PRONUMERAL]
                             }]
                         }),
                         new ExpressionFunctionInput("Value", new ExpressionGroup()
                         {
                             Parts = [new ExpressionTerm()
                             {
-                                Value = myNum
+                                Value = myNum,
+                                Pronumerals = [Pronumeral.NO_PRONUMERAL]
                             }]
                         })
                     ],
@@ -64,7 +98,7 @@ namespace BetterNumberSystem
                     }
                 }
             ];
-            exp.Evaluate();
+            Console.WriteLine(exp.Evaluate());
         }
     }
 }

@@ -10,9 +10,41 @@ namespace BetterNumberSystem.Expression
     {
         public List<IExpressionPart> Parts = new();
 
-        public IExpressionValue Evaluate()
+        public ExpressionGroup Evaluate()
         {
-            throw new NotImplementedException();
+            if (Parts.Count == 0) throw new Exception("Empty expresssion");
+            if (Parts.Count == 1)
+            {
+                if (Parts[0] is ExpressionTerm) return new ExpressionGroup() { Parts = [Parts[0]] };
+                else throw new Exception("Empty expresssion");
+            }
+
+            Stack<ExpressionFunction> functions = new Stack<ExpressionFunction>();
+            ExpressionGroup output = new();
+
+            foreach (IExpressionPart part in Parts)
+                if (part is ExpressionFunction) functions.Push(part as ExpressionFunction);
+            
+            while (functions.Count > 0)
+            {
+                ExpressionFunction function = functions.Pop();
+                var inputs = Parts[Parts.IndexOf(function)+1];
+                Parts.RemoveAt(Parts.IndexOf(function) + 1);
+                if (inputs is not ExpressionFunctionInputs) throw new Exception("Invalid expression structure");
+                inputs = inputs as ExpressionFunctionInputs;
+
+                List<ExpressionGroup> functionInputs = [];
+                foreach (ExpressionFunctionInput input in (inputs as ExpressionFunctionInputs).Inputs)
+                {
+                    functionInputs.Add(input.Value);
+                }
+
+                ExpressionGroup result = function.Function.Invoke(functionInputs.ToArray());
+                
+                output.Parts.Add(result);
+            }
+
+            return output;
         }
 
         public (IExpressionValue, Expression) Simplify()

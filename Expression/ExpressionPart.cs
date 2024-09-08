@@ -19,7 +19,17 @@ namespace BetterNumberSystem.Expression
     public class ExpressionTerm : IExpressionPart
     {
         public IExpressionValue Value;
-        public List<IPronumeral> Pronumerals;
+        public List<Pronumeral> Pronumerals;
+
+        public override string ToString()
+        {
+            string pronumerals = "";
+            foreach (Pronumeral pronumeral in Pronumerals)
+            {
+                pronumerals += pronumeral.Symbol;
+            }
+            return Value.ToString() + pronumerals;
+        }
     }
     /// <summary>
     /// Anything that changes values, +, -, sin, summation, exponents, integrals etc...
@@ -42,7 +52,7 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// The computations that happen when a function is evaluated
     /// </summary>
-    public delegate IExpressionValue MathFunction(IExpressionValue[] inputs);
+    public delegate ExpressionGroup MathFunction(ExpressionGroup[] inputs);
 
     public class ExpressionFunctionInputs : IExpressionPart
     {
@@ -100,5 +110,15 @@ namespace BetterNumberSystem.Expression
     public class ExpressionGroup : IExpressionPart
     {
         public List<IExpressionPart> Parts = new();
+
+        public override string ToString()
+        {
+            string output = "";
+            foreach (IExpressionPart part in Parts)
+            {
+                output += part.ToString() + " ";
+            }
+            return output;
+        }
     }
 }
