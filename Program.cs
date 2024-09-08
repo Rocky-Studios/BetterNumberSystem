@@ -17,7 +17,7 @@ namespace BetterNumberSystem
                 Function = inputs =>
                 {
                     List<ExpressionTerm> terms = [];
-                    Dictionary<List<Pronumeral>, List<ExpressionTerm>> likeTerms = new Dictionary<List<Pronumeral>, List<ExpressionTerm>>(new PronumeralListEqualityComparer());
+                    LikeTermsCollection likeTerms = new();
                     foreach (ExpressionGroup input in inputs)
                     {
                         foreach (IExpressionPart part in input.Parts)
