@@ -43,6 +43,15 @@ namespace BetterNumberSystem.Expression
     {
         public List<ExpressionPart> Parts = new();
 
+        public ExpressionGroup()
+        {
+            Parts = [];
+        }
+        public ExpressionGroup(params ExpressionPart[] parts)
+        {
+            Parts = [.. parts];
+        }
+
         public override string ToString()
         {
             string output = "";
