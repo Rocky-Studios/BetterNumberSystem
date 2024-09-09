@@ -21,5 +21,10 @@ namespace BetterNumberSystem.Expression
         {
             throw new NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return Evaluate().ToString();
+        }
     }
 }

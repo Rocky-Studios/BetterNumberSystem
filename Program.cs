@@ -8,10 +8,9 @@ namespace BetterNumberSystem
         {
             Number myNum = new Number(
                 15,
-                UnitManager.Unit["Millimetre"]
+                UnitManager.Unit["Picofarad"]
                 );
-            Expression.Expression exp = new(FunctionManager.Get("Sum", [new(myNum, myNum)]));
-            Console.WriteLine(exp.Evaluate());
+            Console.WriteLine(myNum + myNum);
         }
     }
 }
