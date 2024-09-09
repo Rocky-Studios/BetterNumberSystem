@@ -12,16 +12,7 @@ namespace BetterNumberSystem
                 );
 
             Expression.Expression exp = new(FunctionManager.Get("Sum", [new ExpressionGroup() { Parts = [
-                new ExpressionTerm()
-                {
-                    Value = myNum,
-                    Pronumerals = [Pronumeral.NO_PRONUMERAL]
-                },
-                new ExpressionTerm()
-                {
-                    Value = myNum,
-                    Pronumerals = [Pronumeral.NO_PRONUMERAL]
-                }
+                myNum, myNum
                 ]}]));
             Console.WriteLine(exp.Evaluate());
         }

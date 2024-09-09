@@ -9,14 +9,18 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// The base class for things that make up an expression
     /// </summary>
-    public interface IExpressionPart
+    public abstract class ExpressionPart
     {
-
+        public static implicit operator ExpressionPart(Number num) => new ExpressionTerm()
+        {
+            Value = num,
+            Pronumerals = [Pronumeral.NO_PRONUMERAL]
+        };
     }
     /// <summary>
     /// The values on which mathematical operations occur in an algebraic expression
     /// </summary>
-    public class ExpressionTerm : IExpressionPart
+    public class ExpressionTerm : ExpressionPart
     {
         public IExpressionValue Value;
         public List<Pronumeral> Pronumerals;
@@ -35,14 +39,14 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// The solver will prioritize things inside this group (basically acts like brackets)
     /// </summary>
-    public class ExpressionGroup : IExpressionPart
+    public class ExpressionGroup : ExpressionPart
     {
-        public List<IExpressionPart> Parts = new();
+        public List<ExpressionPart> Parts = new();
 
         public override string ToString()
         {
             string output = "";
-            foreach (IExpressionPart part in Parts)
+            foreach (ExpressionPart part in Parts)
             {
                 output += part.ToString() + " ";
             }
@@ -60,7 +64,7 @@ namespace BetterNumberSystem.Expression
             LikeTermsCollection likeTerms = [];
             foreach (ExpressionGroup input in expressionGroups)
             {
-                foreach (IExpressionPart part in input.Parts)
+                foreach (ExpressionPart part in input.Parts)
                 {
                     if (part is ExpressionFunction function)
                     {

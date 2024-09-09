@@ -5,7 +5,7 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// Anything that changes values, +, -, sin, summation, exponents, integrals etc...
     /// </summary>
-    public class ExpressionFunction : IExpressionPart
+    public class ExpressionFunction : ExpressionPart
     {
         /// <summary>
         /// The full name of the function eg. Sum, Integral
