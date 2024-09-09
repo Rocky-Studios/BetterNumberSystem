@@ -1,9 +1,11 @@
-﻿namespace BetterNumberSystem.Expression
+﻿using System;
+
+namespace BetterNumberSystem.Expression
 {
     /// <summary>
     /// Anything that changes values, +, -, sin, summation, exponents, integrals etc...
     /// </summary>
-    public class ExpressionFunction : IExpressionPart, ICloneable
+    public class ExpressionFunction : IExpressionPart
     {
         /// <summary>
         /// The full name of the function eg. Sum, Integral
@@ -30,7 +32,7 @@
         /// Generates a new instance with duplicate
         /// </summary>
         /// <returns></returns>
-        public object Clone()
+        public ExpressionFunction Clone()
         {
             return new ExpressionFunction(Name, Symbol, Function, Inputs);
         }
@@ -88,8 +90,8 @@
     /// Describes an input for a function
     /// </summary>
     /// <param name="name">The name used to identify this input</param>
-    /// <param name="identityValue">The identity value, such that when it is the first input in a two input function, the function will return the second input eg. the multiplicative identity is 1 because 1 × x = x</param>
-    public struct ExpressionFunctionInput(string? name, ExpressionGroup? identityValue)
+    /// <param name="value"></param>
+    public struct ExpressionFunctionInput(string? name, ExpressionGroup? value)
     {
         /// <summary>
         /// The name used to identify this input
@@ -98,6 +100,77 @@
         /// <summary>
         /// The identity value, such that when it is the first input in a two input function, the function will return the second input eg. the multiplicative identity is 1 because 1 × x = x
         /// </summary>
-        public ExpressionGroup? Value = identityValue;
+        public ExpressionGroup? Value = value;
+    }
+
+    public static class FunctionManager
+    {
+        public static Dictionary<string, ExpressionFunction> Functions = [];
+
+        public static ExpressionFunction Get(string name)
+        {
+            Functions.TryGetValue(name, out ExpressionFunction returnedFunction);
+            returnedFunction = returnedFunction.Clone();
+            return returnedFunction;
+        }
+
+        public static ExpressionFunction Get(string name, ExpressionGroup[] inputs)
+        {
+            Functions.TryGetValue(name, out ExpressionFunction returnedFunction);
+            returnedFunction = returnedFunction.Clone();
+            if (returnedFunction.Inputs.InputType.Infinite == true)
+            {
+                foreach (ExpressionGroup input in inputs)
+                {
+                    returnedFunction.Inputs.Inputs.Add(new ExpressionFunctionInput()
+                    {
+                        Name = "",
+                        Value = input
+                    });
+                }
+            }
+            return returnedFunction;
+        }
+
+        static FunctionManager()
+        {
+            Functions.Add("Sum",
+                new("Sum", "+",
+                (ExpressionFunctionInputs inputs) =>
+                {
+                    LikeTermsCollection likeTerms = inputs.ToLikeTermsCollection();
+
+                    // Assuming we're only dealing with numbers (no vectors or matrices yet)
+                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                        foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
+                            if (expressionTerm.Value is not Number) throw new NotImplementedException();
+
+                    ExpressionGroup output = new();
+
+                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    {
+                        List<Pronumeral> pronumerals = likeTermCollection.Key;
+                        Number total = new(0, (likeTermCollection.Value[0].Value as Number).Unit);
+
+                        foreach (ExpressionTerm t in likeTermCollection.Value)
+                        {
+                            Number n = t.Value as Number;
+                            Number nConverted = n.Convert(total.Unit);
+                            total.NumericValue += nConverted.NumericValue;
+                        }
+
+                        output.Parts.Add(new ExpressionTerm() { Value = total, Pronumerals = pronumerals });
+                    }
+                    return output;
+                },
+                new ExpressionFunctionInputs()
+                {
+                    InputType = new ExpressionFunctionInputAmount()
+                    {
+                        Infinite = true
+                    }
+                }
+            ));
+        }
     }
 }

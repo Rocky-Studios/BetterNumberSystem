@@ -11,63 +11,18 @@ namespace BetterNumberSystem
                 UnitManager.Unit["Millimetre"]
                 );
 
-            // 
-            ExpressionFunction add = new("Sum", "+",
-                (ExpressionFunctionInputs inputs) =>
+            Expression.Expression exp = new(FunctionManager.Get("Sum", [new ExpressionGroup() { Parts = [
+                new ExpressionTerm()
                 {
-                    LikeTermsCollection likeTerms = inputs.ToLikeTermsCollection();
-                    
-                    // Assuming we're only dealing with numbers (no vectors or matrices yet)
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
-                        foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
-                            if (expressionTerm.Value is not Number) throw new NotImplementedException();
-
-                    ExpressionGroup output = new();
-
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
-                    {
-                        List<Pronumeral> pronumerals = likeTermCollection.Key;
-                        Number total = new(0, (likeTermCollection.Value[0].Value as Number).Unit);
-
-                        foreach (ExpressionTerm t in likeTermCollection.Value)
-                        {
-                            Number n = t.Value as Number;
-                            Number nConverted = n.Convert(total.Unit);
-                            total.NumericValue += nConverted.NumericValue;
-                        }
-
-                        output.Parts.Add(new ExpressionTerm() { Value = total, Pronumerals = pronumerals });
-                    }
-                    return output;
+                    Value = myNum,
+                    Pronumerals = [Pronumeral.NO_PRONUMERAL]
                 },
-                new ExpressionFunctionInputs()
+                new ExpressionTerm()
                 {
-                    Inputs = [
-                        new ExpressionFunctionInput("Value", new ExpressionGroup()
-                        {
-                            Parts = [new ExpressionTerm()
-                            {
-                                Value = myNum,
-                                Pronumerals = [Pronumeral.NO_PRONUMERAL]
-                            }]
-                        }),
-                        new ExpressionFunctionInput("Value", new ExpressionGroup()
-                        {
-                            Parts = [new ExpressionTerm()
-                            {
-                                Value = myNum,
-                                Pronumerals = [Pronumeral.NO_PRONUMERAL]
-                            }]
-                        })
-                    ],
-                    InputType = new ExpressionFunctionInputAmount()
-                    {
-                        Infinite = true
-                    }
+                    Value = myNum,
+                    Pronumerals = [Pronumeral.NO_PRONUMERAL]
                 }
-            );
-
-            Expression.Expression exp = new(add);
+                ]}]));
             Console.WriteLine(exp.Evaluate());
         }
     }
