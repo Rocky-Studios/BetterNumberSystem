@@ -34,7 +34,7 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// Anything that changes values, +, -, sin, summation, exponents, integrals etc...
     /// </summary>
-    public class ExpressionFunction : IExpressionPart
+    public class ExpressionFunction : IExpressionPart, ICloneable
     {
         /// <summary>
         /// The full name of the function eg. Sum, Integral
@@ -48,13 +48,30 @@ namespace BetterNumberSystem.Expression
         /// The computations that happen when the function is evaluated
         /// </summary>
         public MathFunction Function;
+        public ExpressionFunctionInputs Inputs;
+
+        public ExpressionFunction(string name, string? symbol, MathFunction function, ExpressionFunctionInputs inputs)
+        {
+            Name = name;
+            Symbol = symbol;
+            Function = function;
+            Inputs = inputs;
+        }
+        /// <summary>
+        /// Generates a new instance with duplicate
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            return new ExpressionFunction(Name, Symbol, Function, Inputs);
+        }
     }
     /// <summary>
     /// The computations that happen when a function is evaluated
     /// </summary>
-    public delegate ExpressionGroup MathFunction(ExpressionGroup[] inputs);
+    public delegate ExpressionGroup MathFunction(ExpressionFunctionInputs inputs);
 
-    public class ExpressionFunctionInputs : IExpressionPart
+    public class ExpressionFunctionInputs
     {
         /// <summary>
         /// How many inputs this function can take <br/>
@@ -66,7 +83,17 @@ namespace BetterNumberSystem.Expression
         /// NOTE: the last input will be used for functions that take an infinite amount of inputs
         /// </summary>
         public List<ExpressionFunctionInput> Inputs = [];
-    }
+
+        public LikeTermsCollection ToLikeTermsCollection()
+        {
+            List<ExpressionGroup> inputsAsGroups = [];
+            foreach (ExpressionFunctionInput input in Inputs)
+            {
+                inputsAsGroups.Add(input.Value);
+            }
+            return ExpressionGroup.ToLikeTermsCollection(inputsAsGroups.ToArray());
+        }
+}
     /// <summary>
     /// How many inputs a function can take <br/>
     /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property

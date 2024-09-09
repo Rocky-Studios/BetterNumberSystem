@@ -10,14 +10,13 @@ namespace BetterNumberSystem
                 15,
                 UnitManager.Unit["Millimetre"]
                 );
-            ExpressionFunction add = new ExpressionFunction()
-            {
-                Name = "Sum",
-                Symbol = "+",
-                Function = inputs =>
-                {
-                    LikeTermsCollection likeTerms = ExpressionGroup.ToLikeTermsCollection(inputs);
 
+            // 
+            ExpressionFunction add = new("Sum", "+",
+                (ExpressionFunctionInputs inputs) =>
+                {
+                    LikeTermsCollection likeTerms = inputs.ToLikeTermsCollection();
+                    
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
                     foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
@@ -37,15 +36,10 @@ namespace BetterNumberSystem
                             total.NumericValue += nConverted.NumericValue;
                         }
 
-                        output.Parts.Add(new ExpressionTerm() { Value = total, Pronumerals = pronumerals});
+                        output.Parts.Add(new ExpressionTerm() { Value = total, Pronumerals = pronumerals });
                     }
                     return output;
-                }
-            };
-
-            Expression.Expression exp = new Expression.Expression();
-            exp.Parts = [
-                add,
+                },
                 new ExpressionFunctionInputs()
                 {
                     Inputs = [
@@ -71,7 +65,9 @@ namespace BetterNumberSystem
                         Infinite = true
                     }
                 }
-            ];
+            );
+
+            Expression.Expression exp = new(add);
             Console.WriteLine(exp.Evaluate());
         }
     }
