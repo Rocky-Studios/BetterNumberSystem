@@ -17,7 +17,7 @@ namespace BetterNumberSystem.Expression
             return RootFunction.Function(RootFunction.Inputs);
         }
 
-        public (IExpressionValue, Expression) Simplify()
+        public LikeTermsCollection Simplify()
         {
             throw new NotImplementedException();
         }
