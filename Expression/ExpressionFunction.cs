@@ -84,6 +84,14 @@ namespace BetterNumberSystem.Expression
             }
             return ExpressionGroup.ToLikeTermsCollection([.. inputsAsGroups]);
         }
+        /// <summary>
+        /// Creates a new function input decleration by specifying the input amounts
+        /// </summary>
+        public ExpressionFunctionInputs(bool one = false, bool two = false, bool three = false, bool infinite = false)
+        {
+            InputType = new ExpressionFunctionInputAmount(one, two, three, infinite);
+            Inputs = [];
+        }
     }
     /// <summary>
     /// How many inputs a function can take.<br/>
@@ -207,13 +215,7 @@ namespace BetterNumberSystem.Expression
                     }
                     return output;
                 },
-                new ExpressionFunctionInputs()
-                {
-                    InputType = new ExpressionFunctionInputAmount()
-                    {
-                        Infinite = true
-                    }
-                }
+                new ExpressionFunctionInputs(infinite: true)
             );
         }
     }
