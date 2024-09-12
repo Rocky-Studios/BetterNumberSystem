@@ -72,19 +72,6 @@ namespace BetterNumberSystem.Expression
         /// </summary>
         public List<ExpressionFunctionInput> Inputs = [];
         /// <summary>
-        /// Converts the inputs to a collection of like terms.
-        /// </summary>
-        /// <returns></returns>
-        public LikeTermsCollection ToLikeTermsCollection()
-        {
-            List<ExpressionGroup> inputsAsGroups = [];
-            foreach (ExpressionFunctionInput input in Inputs)
-            {
-                if(input.Value is not null) inputsAsGroups.Add(input.Value);
-            }
-            return ExpressionGroup.ToLikeTermsCollection([.. inputsAsGroups]);
-        }
-        /// <summary>
         /// Creates a new function input decleration by specifying the input amounts
         /// </summary>
         public ExpressionFunctionInputs(bool one = false, bool two = false, bool three = false, bool infinite = false)
@@ -131,6 +118,16 @@ namespace BetterNumberSystem.Expression
         /// The value of this input.
         /// </summary>
         public ExpressionGroup? Value = null;
+        /// <summary>
+        /// Converts the input to a collection of like terms.
+        /// </summary>
+        /// <returns></returns>
+        public LikeTermsCollection ToLikeTermsCollection()
+        {
+            List<ExpressionGroup> inputsAsGroups = [];
+            if (Value is not null) inputsAsGroups.Add(Value);
+            return ExpressionGroup.ToLikeTermsCollection([.. inputsAsGroups]);
+        }
     }
     /// <summary>
     /// A class for cloning functions for use in expressions.
@@ -190,8 +187,14 @@ namespace BetterNumberSystem.Expression
             _ = new ExpressionFunction("Sum", "+",
                 (ExpressionFunctionInputs inputs) =>
                 {
-                    LikeTermsCollection likeTerms = inputs.ToLikeTermsCollection();
-
+                    LikeTermsCollection likeTerms = [];
+                    foreach (ExpressionFunctionInput input in inputs.Inputs)
+                    {
+                        foreach(var likeTerm in input.ToLikeTermsCollection())
+                        {
+                            likeTerms.Add(likeTerm.Key, likeTerm.Value);
+                        }
+                    }
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
                     foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
