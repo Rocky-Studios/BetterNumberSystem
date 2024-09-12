@@ -31,12 +31,15 @@ namespace BetterNumberSystem.Expression
         /// <param name="symbol"></param>
         /// <param name="function"></param>
         /// <param name="inputs"></param>
-        public ExpressionFunction(string name, string? symbol, MathFunction function, ExpressionFunctionInputs inputs)
+        /// <param name="cloned">Whether this instance of this function has been cloned from another</param>
+        public ExpressionFunction(string name, string? symbol, MathFunction function, ExpressionFunctionInputs inputs, bool cloned = false)
         {
             Name = name;
             Symbol = symbol;
             Function = function;
             Inputs = inputs;
+
+            if(!cloned) FunctionManager.Functions.Add(name, this);
         }
         /// <summary>
         /// Generates a new duplicate instance of this function.
@@ -44,7 +47,8 @@ namespace BetterNumberSystem.Expression
         /// <returns></returns>
         public ExpressionFunction Clone()
         {
-            return new ExpressionFunction(Name, Symbol, Function, Inputs);
+            ExpressionFunction newFunction = new(Name, Symbol, Function, Inputs, true);
+            return newFunction;
         }
     }
 
@@ -175,8 +179,7 @@ namespace BetterNumberSystem.Expression
         static FunctionManager()
         {
             // Initialize all default functions
-            Functions.Add("Sum",
-                new("Sum", "+",
+            _ = new ExpressionFunction("Sum", "+",
                 (ExpressionFunctionInputs inputs) =>
                 {
                     LikeTermsCollection likeTerms = inputs.ToLikeTermsCollection();
@@ -211,7 +214,7 @@ namespace BetterNumberSystem.Expression
                         Infinite = true
                     }
                 }
-            ));
+            );
         }
     }
 }
