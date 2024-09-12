@@ -7,10 +7,14 @@ using System.Threading.Tasks;
 namespace BetterNumberSystem.Expression
 {
     /// <summary>
-    /// The base class for things that make up an expression
+    /// The base class for things that make up an expression.
     /// </summary>
     public abstract class ExpressionPart
     {
+        /// <summary>
+        /// Implicitly converts a number to a term.
+        /// </summary>
+        /// <param name="num">The number to be converted</param>
         public static implicit operator ExpressionPart(Number num) => new ExpressionTerm()
         {
             Value = num,
@@ -18,13 +22,23 @@ namespace BetterNumberSystem.Expression
         };
     }
     /// <summary>
-    /// The values on which mathematical operations occur in an algebraic expression
+    /// The values on which mathematical operations occur in an algebraic expression.
     /// </summary>
     public class ExpressionTerm : ExpressionPart
     {
+        /// <summary>
+        /// The coefficient of the term.
+        /// </summary>
         public IExpressionValue Value;
+        /// <summary>
+        /// The variables or constants of the term.
+        /// </summary>
         public List<Pronumeral> Pronumerals;
 
+        /// <summary>
+        /// Shows the coefficient and pronumerals of the term as text.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             string pronumerals = "";
@@ -37,21 +51,33 @@ namespace BetterNumberSystem.Expression
     }
 
     /// <summary>
-    /// The solver will prioritize things inside this group (basically acts like brackets)
+    /// A group of functions and terms.
     /// </summary>
     public class ExpressionGroup : ExpressionPart
     {
-        public List<ExpressionPart> Parts = new();
-
+        /// <summary>
+        /// The collection of functions and terms.
+        /// </summary>
+        public List<ExpressionPart> Parts = [];
+        /// <summary>
+        /// Creates an empty <c>ExpressionGroup</c>.
+        /// </summary>
         public ExpressionGroup()
         {
             Parts = [];
         }
+        /// <summary>
+        /// Creates an <c>ExpressionGroup</c> with specified parts.
+        /// </summary>
+        /// <param name="parts">The list of parts.</param>
         public ExpressionGroup(params ExpressionPart[] parts)
         {
             Parts = [.. parts];
         }
-
+        /// <summary>
+        /// Converts the <c>ExpressionGroup</c> to text by converting each part to text.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             string output = "";
@@ -62,11 +88,11 @@ namespace BetterNumberSystem.Expression
             return output;
         }
         /// <summary>
-        /// Converts multiple (or one) expression group to a collection of like terms
+        /// Converts one or more expression groups to a collection of like terms.
         /// </summary>
         /// <param name="expressionGroups"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException">Nested function simplification not implemented yet</exception>
+        /// <exception cref="NotImplementedException">Nested function simplification not implemented yet.</exception>
         public static LikeTermsCollection ToLikeTermsCollection(ExpressionGroup[] expressionGroups)
         {
             List<ExpressionTerm> terms = [];

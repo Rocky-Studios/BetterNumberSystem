@@ -8,19 +8,29 @@ namespace BetterNumberSystem.Expression
     public class ExpressionFunction : ExpressionPart
     {
         /// <summary>
-        /// The full name of the function eg. Sum, Integral
+        /// The full name of the function eg. Sum, Integral.
         /// </summary>
         public string Name = "";
         /// <summary>
-        /// A symbol used to identify this function eg. + for sum, ∫ for integral
+        /// A short and recognisable symbol used to identify this function eg. + for sum, ∫ for integral.
         /// </summary>
         public string? Symbol = "";
         /// <summary>
-        /// The computations that happen when the function is evaluated
+        /// The computations that happen when the function is evaluated.
         /// </summary>
         public MathFunction Function;
+        /// <summary>
+        /// The inputs to the computation.
+        /// </summary>
         public ExpressionFunctionInputs Inputs;
 
+        /// <summary>
+        /// Creates an <c>ExpressionFunction</c> with the specified parameters.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="symbol"></param>
+        /// <param name="function"></param>
+        /// <param name="inputs"></param>
         public ExpressionFunction(string name, string? symbol, MathFunction function, ExpressionFunctionInputs inputs)
         {
             Name = name;
@@ -29,7 +39,7 @@ namespace BetterNumberSystem.Expression
             Inputs = inputs;
         }
         /// <summary>
-        /// Generates a new instance with duplicate
+        /// Generates a new duplicate instance of this function.
         /// </summary>
         /// <returns></returns>
         public ExpressionFunction Clone()
@@ -39,81 +49,110 @@ namespace BetterNumberSystem.Expression
     }
 
     /// <summary>
-    /// The computations that happen when a function is evaluated
+    /// The computations that happen when a function is evaluated.
     /// </summary>
     public delegate ExpressionGroup MathFunction(ExpressionFunctionInputs inputs);
-
+    /// <summary>
+    /// Defines the structure of expression inputs.
+    /// </summary>
     public class ExpressionFunctionInputs
     {
         /// <summary>
-        /// How many inputs this function can take <br/>
-        /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property
+        /// How many inputs this function can take. <br/>
+        /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property.
         /// </summary>
         public ExpressionFunctionInputAmount InputType;
         /// <summary>
-        /// The inputs for this function <br/>
-        /// NOTE: the last input will be used for functions that take an infinite amount of inputs
+        /// The inputs for this function. <br/>
+        /// NOTE: the last input will be used for functions that take an infinite amount of inputs.
         /// </summary>
         public List<ExpressionFunctionInput> Inputs = [];
-
+        /// <summary>
+        /// Converts the inputs to a collection of like terms.
+        /// </summary>
+        /// <returns></returns>
         public LikeTermsCollection ToLikeTermsCollection()
         {
             List<ExpressionGroup> inputsAsGroups = [];
             foreach (ExpressionFunctionInput input in Inputs)
             {
-                inputsAsGroups.Add(input.Value);
+                if(input.Value is not null) inputsAsGroups.Add(input.Value);
             }
-            return ExpressionGroup.ToLikeTermsCollection(inputsAsGroups.ToArray());
+            return ExpressionGroup.ToLikeTermsCollection([.. inputsAsGroups]);
         }
     }
     /// <summary>
-    /// How many inputs a function can take <br/>
-    /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property
+    /// How many inputs a function can take.<br/>
+    /// NOTE: If this function can take any amount of inputs, ALWAYS use only the infinite property.
     /// </summary>
-    public struct ExpressionFunctionInputAmount
-    {
-        public bool One = false;
-        public bool Two = true;
-        public bool Three = false;
-        public bool Infinite = false;
-
-        public ExpressionFunctionInputAmount(bool one, bool two, bool three, bool infinite)
-        {
-            One = one;
-            Two = two;
-            Three = three;
-            Infinite = infinite;
-        }
-    }
-
-    /// <summary>
-    /// Describes an input for a function
-    /// </summary>
-    /// <param name="name">The name used to identify this input</param>
-    /// <param name="value"></param>
-    public struct ExpressionFunctionInput(string? name, ExpressionGroup? value)
+    public struct ExpressionFunctionInputAmount(bool one, bool two, bool three, bool infinite)
     {
         /// <summary>
-        /// The name used to identify this input
+        /// Where this function works when it has only one input.
+        /// </summary>
+        public bool One = one;
+        /// <summary>
+        /// Where this function works when it has 2 inputs.
+        /// </summary>
+        public bool Two = two;
+        /// <summary>
+        /// Where this function works when it has 2 inputs.
+        /// </summary>
+        public bool Three = three;
+        /// <summary>
+        /// Where this function works when it has any amonut of inputs.
+        /// </summary>
+        public bool Infinite = infinite;
+    }
+
+    /// <summary>
+    /// Describes an input for a function.
+    /// </summary>
+    /// <param name="name">The name used to identify this input.</param>
+    public struct ExpressionFunctionInput(string? name)
+    {
+        /// <summary>
+        /// The name used to identify this input.
         /// </summary>
         public string? Name = name;
         /// <summary>
-        /// The identity value, such that when it is the first input in a two input function, the function will return the second input eg. the multiplicative identity is 1 because 1 × x = x
+        /// The value of this input.
         /// </summary>
-        public ExpressionGroup? Value = value;
+        public ExpressionGroup? Value = null;
     }
-
+    /// <summary>
+    /// A class for cloning functions for use in expressions.
+    /// </summary>
     public static class FunctionManager
     {
-        public static Dictionary<string, ExpressionFunction> Functions = [];
-
+        /// <summary>
+        /// The list of all available functions.
+        /// </summary>
+        public static readonly Dictionary<string, ExpressionFunction> Functions = [];
+        /// <summary>
+        /// Query for a function by its full name.
+        /// </summary>
+        /// <param name="name">The full name of the function eg. Sum for +.</param>
+        /// <returns></returns>
         public static ExpressionFunction Get(string name)
         {
-            Functions.TryGetValue(name, out ExpressionFunction returnedFunction);
-            returnedFunction = returnedFunction.Clone();
-            return returnedFunction;
+            try
+            {
+                Functions.TryGetValue(name, out ExpressionFunction returnedFunction);
+                returnedFunction = returnedFunction.Clone();
+                return returnedFunction;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Cannot find function with name " + name);
+            }
         }
-
+        /// <summary>
+        /// Query for a function by its full name and assign its inputs.
+        /// </summary>
+        /// <param name="name">The full name of the function eg. Sum for +</param>
+        /// <param name="inputs">The inputs to assign</param>
+        /// <returns></returns>
         public static ExpressionFunction Get(string name, ExpressionGroup[] inputs)
         {
             Functions.TryGetValue(name, out ExpressionFunction returnedFunction);
@@ -129,11 +168,13 @@ namespace BetterNumberSystem.Expression
                     });
                 }
             }
+            else throw new NotImplementedException();
             return returnedFunction;
         }
-
+        
         static FunctionManager()
         {
+            // Initialize all default functions
             Functions.Add("Sum",
                 new("Sum", "+",
                 (ExpressionFunctionInputs inputs) =>
