@@ -19,5 +19,27 @@ namespace BetterNumberSystem.Expression
         {
 
         }
+        /// <summary>
+        /// Converts this collection to an array of terms grouped by their pronumerals
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            string output = "";
+            foreach (var likeTerms in this)
+            {
+                foreach (ExpressionTerm term in likeTerms.Value)
+                {
+                    output += term.Value;
+                    foreach (Pronumeral pronumeral in likeTerms.Key)
+                    {
+                        output += pronumeral.Symbol;
+                    }
+                    output += ", ";
+                }
+               
+            }
+            return output[..^2];
+        }
     }
 }

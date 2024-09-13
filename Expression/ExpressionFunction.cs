@@ -55,7 +55,7 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// The computations that happen when a function is evaluated.
     /// </summary>
-    public delegate ExpressionGroup MathFunction(ExpressionFunctionInputs inputs);
+    public delegate LikeTermsCollection MathFunction(ExpressionFunctionInputs inputs);
     /// <summary>
     /// Defines the structure of expression inputs.
     /// </summary>
@@ -200,7 +200,7 @@ namespace BetterNumberSystem.Expression
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
                             if (expressionTerm.Value is not Number) throw new NotImplementedException();
 
-                    ExpressionGroup output = new();
+                    LikeTermsCollection output = [];
 
                     foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                     {
@@ -214,7 +214,7 @@ namespace BetterNumberSystem.Expression
                             total.NumericValue += nConverted.NumericValue;
                         }
 
-                        output.Parts.Add(new ExpressionTerm() { Value = total, Pronumerals = pronumerals });
+                        output.Add(pronumerals, [(ExpressionTerm)total]);
                     }
                     return output;
                 },

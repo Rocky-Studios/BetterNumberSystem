@@ -28,7 +28,7 @@ namespace BetterNumberSystem.Expression
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public ExpressionGroup Evaluate()
+        public LikeTermsCollection Evaluate()
         {
             if (RootFunction is null) throw new Exception("Empty/invalid expresssion");
 
