@@ -59,7 +59,7 @@ namespace BetterNumberSystem
             {
                 throw new ArgumentException("Please provide a valid number data string.");
             }
-            string pattern = @"^(-?\d+(\.\d+)?)(\S*)\s(\S*)$";
+            string pattern = @"^(-?\d+(\.\d+)?)(\S*)";
             Match match = Regex.Match(numberData, pattern);
             if (!match.Success)
             {
@@ -71,16 +71,12 @@ namespace BetterNumberSystem
             double numericValue = System.Convert.ToDouble(match.Groups[1].Value);
             output.NumericValue = numericValue;
 
-            // Measurement type
-            MeasurementType parsedMeasurementType;
-            bool measurementTypeParseResult = Enum.TryParse<MeasurementType>(match.Groups[4].Value, out parsedMeasurementType);
-            if (!measurementTypeParseResult) throw new ArgumentException("Number data string had invalid measurement type.");
-            output.MeasurementType = parsedMeasurementType;
-
             // Unit
             Unit parsedNumberUnit = Unit.GetNumberUnitBySuffix(match.Groups[3].Value);
             if (parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
             output.Unit = parsedNumberUnit;
+            
+            output.MeasurementType = output.Unit.MeasurementType;
 
             return output;
         }
@@ -91,7 +87,7 @@ namespace BetterNumberSystem
         /// <returns>A string that represents the current object</returns>
         public override string ToString()
         {
-            return Get(unit: true, type: true);
+            return Get(unit: true);
         }
 
         /// <summary>
