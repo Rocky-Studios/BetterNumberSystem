@@ -327,19 +327,9 @@ namespace BetterNumberSystem
         /// <param name="b"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static Number operator -(Number a, Number b)
+        public static Expression.Expression operator - (Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
-            {
-                throw new ArgumentException("Cannot subtract numbers with different measurement types");
-            }
-            Number bConverted = b.Convert(a.Unit);
-            if ((double)(a.NumericValue - bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
-            return new Number(
-                (double)(a.NumericValue - bConverted.NumericValue),
-                a.Unit,
-                a.MeasurementType
-                );
+            return new Expression.Expression(FunctionManager.Get("Difference", [new ExpressionGroup(a), new ExpressionGroup(b)]));
         }
 
         public static Number operator *(Number a, Number b)

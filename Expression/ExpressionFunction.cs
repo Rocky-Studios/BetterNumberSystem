@@ -166,18 +166,18 @@ namespace BetterNumberSystem.Expression
         {
             Functions.TryGetValue(name, out ExpressionFunction returnedFunction);
             returnedFunction = returnedFunction.Clone();
-            if (returnedFunction.Inputs.InputType.Infinite == true)
+            if (returnedFunction.Inputs.InputType.Infinite || 
+                (returnedFunction.Inputs.InputType.One && inputs.Length == 1) || 
+                (returnedFunction.Inputs.InputType.Two && inputs.Length == 2) || 
+                (returnedFunction.Inputs.InputType.Three && inputs.Length == 3))
             {
-                foreach (ExpressionGroup input in inputs)
-                {
-                    returnedFunction.Inputs.Inputs.Add(new ExpressionFunctionInput()
-                    {
-                        Name = "",
-                        Value = input
-                    });
-                }
+                returnedFunction.Inputs.Inputs = inputs.Select(input => new ExpressionFunctionInput(null) { Value = input }).ToList();
+                return returnedFunction;
             }
-            else throw new NotImplementedException();
+            else
+            {
+                throw new ArgumentException("Invalid number of inputs for function " + name);
+            }
             return returnedFunction;
         }
         
@@ -224,6 +224,113 @@ namespace BetterNumberSystem.Expression
                     return output;
                 },
                 new ExpressionFunctionInputs(infinite: true)
+            );
+             _ = new ExpressionFunction("Difference", "-",
+                (ExpressionFunctionInputs inputs) =>
+                {
+                    switch (inputs.Inputs.Count) {
+                        case 1:
+                        {
+                            LikeTermsCollection likeTerms = [];
+                            foreach (var likeTerm in inputs.Inputs[0].ToLikeTermsCollection()) {
+                                if (likeTerms.ContainsKey(likeTerm.Key)) {
+                                    List<ExpressionTerm> terms = likeTerms[likeTerm.Key];
+                                    terms.AddRange(likeTerm.Value);
+                                    likeTerms[likeTerm.Key] = terms;
+                                }
+                                else
+                                    likeTerms.Add(likeTerm.Key, likeTerm.Value);
+                            }
+
+                            foreach (var likeTerm in likeTerms) {
+                                foreach (var term in likeTerm.Value) {
+                                    switch (term.Value) {
+                                        case Number n:
+                                            n.NumericValue *= -1;
+                                            break;
+                                        case Vector2 v2:
+                                            v2.X.NumericValue *= -1;
+                                            v2.Y.NumericValue *= -1;
+                                            break;
+                                        case Vector3 v3:
+                                            v3.X.NumericValue *= -1;
+                                            v3.Y.NumericValue *= -1;
+                                            v3.Z.NumericValue *= -1;
+                                            break;
+                                        default:
+                                            throw new ArgumentException("Cannot negate this type of value");
+                                    }
+                                }
+                            }
+
+                            return likeTerms;
+                            break;
+                        }
+                        case 2:
+                            LikeTermsCollection likeTermsA = [];
+                            foreach (var likeTerm in inputs.Inputs[0].ToLikeTermsCollection()) {
+                                if (likeTermsA.ContainsKey(likeTerm.Key)) {
+                                    List<ExpressionTerm> terms = likeTermsA[likeTerm.Key];
+                                    terms.AddRange(likeTerm.Value);
+                                    likeTermsA[likeTerm.Key] = terms;
+                                }
+                                else
+                                    likeTermsA.Add(likeTerm.Key, likeTerm.Value);
+                            }
+                            LikeTermsCollection likeTermsB = [];
+                            foreach (var likeTerm in inputs.Inputs[1].ToLikeTermsCollection()) {
+                                if (likeTermsB.ContainsKey(likeTerm.Key)) {
+                                    List<ExpressionTerm> terms = likeTermsB[likeTerm.Key];
+                                    terms.AddRange(likeTerm.Value);
+                                    likeTermsB[likeTerm.Key] = terms;
+                                }
+                                else
+                                    likeTermsB.Add(likeTerm.Key, likeTerm.Value);
+                            }
+                            
+                            // Assuming we're only dealing with numbers (no vectors or matrices yet)
+                            if (
+                                likeTermsA.SelectMany(likeTermCollection
+                                    => likeTermCollection.Value).Any(expressionTerm => expressionTerm.Value is not Number) ||
+                                likeTermsB.SelectMany(likeTermCollection
+                                    => likeTermCollection.Value).Any(expressionTerm => expressionTerm.Value is not Number)) {
+                                throw new NotImplementedException();
+                            }
+
+                            LikeTermsCollection output = [];
+
+                            foreach (var likeTermCollection in likeTermsA)
+                            {
+                                List<Pronumeral> pronumerals = likeTermCollection.Key;
+                                Number total = new(0, (likeTermCollection.Value[0].Value as Number).Unit);
+                            
+                                foreach (ExpressionTerm t in likeTermCollection.Value)
+                                {
+                                    Number n = t.Value as Number;
+                                    Number nConverted = n.Convert(total.Unit);
+                                    total.NumericValue += nConverted.NumericValue;
+                                }
+                            
+                                foreach (ExpressionTerm t in likeTermsB[pronumerals])
+                                {
+                                    Number n = t.Value as Number;
+                                    Number nConverted = n.Convert(total.Unit);
+                                    total.NumericValue -= nConverted.NumericValue;
+                                }
+
+                                total.NumericValue = Math.Round(total.NumericValue, 12);
+                                output.Add(pronumerals, [(ExpressionTerm)total]);
+                            }
+                            
+                            return output;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(inputs), "Difference function can only take 1 or 2 inputs");
+                    }
+                    
+
+                    
+                },
+                new ExpressionFunctionInputs(one: true, two: true)
             );
         }
     }

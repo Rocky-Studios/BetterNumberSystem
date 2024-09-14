@@ -31,4 +31,28 @@ public class ExpressionTests
         Expression.Expression expression = numA + numB;
         Assert.AreEqual(expression.Evaluate().ToString(), "1.07m");
     }
+    
+    /// <summary>
+    /// Tests whether subtracting numbers works correctly
+    /// </summary>
+    [Test]
+    public void NumberDiffTest()
+    {
+        Number numA = new(1.05);
+        Number numB = new(0.2);
+        Expression.Expression expression = numA - numB;
+        Assert.AreEqual(expression.Evaluate().ToString(), "0.85");
+    }
+    
+    /// <summary>
+    /// Tests whether subtracting numbers with units works correctly
+    /// </summary>
+    [Test]
+    public void NumberDiffTestWithUnits()
+    {
+        Number numA = new(1.05, UnitManager.Units["Metre"]);
+        Number numB = new(2, UnitManager.Units["Centimetre"]);
+        Expression.Expression expression = numA - numB;
+        Assert.AreEqual(expression.Evaluate().ToString(), "1.03m");
+    }
 }
