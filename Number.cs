@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using BetterNumberSystem.Expression;
 
 namespace BetterNumberSystem
 {
     /// <summary>
     /// The universal class for all measurements in the Better Number System
     /// </summary>
-    public class Number
+    public class Number : IExpressionValue
     {
         #region Fields
         /// <summary>
@@ -315,7 +316,7 @@ namespace BetterNumberSystem
         /// <param name="b"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static Number operator + (Number a, Number b)
+        public static Expression.Expression operator + (Number a, Number b)
         {
             if (a.MeasurementType != b.MeasurementType)
             {
@@ -323,11 +324,7 @@ namespace BetterNumberSystem
             }
             Number bConverted = b.Convert(a.Unit);
             if ((double)(a.NumericValue + bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
-            return new Number(
-                (double)(a.NumericValue + bConverted.NumericValue),
-                a.Unit,
-                a.MeasurementType
-                );
+            return new Expression.Expression(FunctionManager.Get("Sum", [new(a, b)]));
         }
         /// <summary>
         /// Subtracts two numbers, giving the output in terms of the first number
