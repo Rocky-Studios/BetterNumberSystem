@@ -1,5 +1,10 @@
+using NUnit.Framework;
+
 namespace BetterNumberSystem.Tests;
 
+/// <summary>
+///    Tests for the <see cref="BetterNumberSystem.Number"/> class
+/// </summary>
 public class NumberTests
 {
 
