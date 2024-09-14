@@ -1,0 +1,34 @@
+﻿using NUnit.Framework;
+using BetterNumberSystem;
+using BetterNumberSystem.Expression;
+
+namespace BetterNumberSystem.Tests;
+/// <summary>
+/// Tests regarding expressions and math
+/// </summary>
+public class ExpressionTests
+{
+    /// <summary>
+    /// Tests whether adding numbers works correctly
+    /// </summary>
+    [Test]
+    public void NumberSumTest()
+    {
+        Number numA = new(1.05);
+        Number numB = new(2.0);
+        Expression.Expression expression = numA + numB;
+        Assert.AreEqual(expression.Evaluate().ToString(), "3.05");
+    }
+    
+    /// <summary>
+    /// Tests whether adding numbers with units works correctly
+    /// </summary>
+    [Test]
+    public void NumberSumTestWithUnits()
+    {
+        Number numA = new(1.05, UnitManager.Units["Metre"]);
+        Number numB = new(2.0, UnitManager.Units["Centimetre"]);
+        Expression.Expression expression = numA + numB;
+        Assert.AreEqual(expression.Evaluate().ToString(), "1.07m");
+    }
+}

@@ -44,7 +44,7 @@ namespace BetterNumberSystem
         public Number(double numericValue = 0, Unit? unit = null, MeasurementType? measurementType = null)
         {
             Unit = unit ?? UnitManager.Unit["Plain"];
-            MeasurementType = measurementType ?? unit.MeasurementType;
+            MeasurementType = measurementType ?? Unit.MeasurementType;
             if (numericValue < 0 && !Unit.CanBeNegative) throw new ArgumentException(Unit.FullName + " cannot be negative");
             else NumericValue = numericValue;
         }
