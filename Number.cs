@@ -318,13 +318,7 @@ namespace BetterNumberSystem
         /// <exception cref="ArgumentException"></exception>
         public static Expression.Expression operator + (Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
-            {
-                throw new ArgumentException("Cannot add numbers with different measurement types");
-            }
-            Number bConverted = b.Convert(a.Unit);
-            if ((double)(a.NumericValue + bConverted.NumericValue) < 0 && !a.Unit.CanBeNegative) throw new Exception(a.Unit.FullName + " cannot be negative");
-            return new Expression.Expression(FunctionManager.Get("Sum", [new(a, b)]));
+            return new Expression.Expression(FunctionManager.Get("Sum", [new ExpressionGroup(a), new ExpressionGroup(b)]));
         }
         /// <summary>
         /// Subtracts two numbers, giving the output in terms of the first number

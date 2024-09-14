@@ -192,7 +192,12 @@ namespace BetterNumberSystem.Expression
                     {
                         foreach(var likeTerm in input.ToLikeTermsCollection())
                         {
-                            likeTerms.Add(likeTerm.Key, likeTerm.Value);
+                            if (likeTerms.ContainsKey(likeTerm.Key)) {
+                                List<ExpressionTerm> terms = likeTerms[likeTerm.Key];
+                                terms.AddRange(likeTerm.Value);
+                                likeTerms[likeTerm.Key] = terms;
+                            } else
+                                likeTerms.Add(likeTerm.Key, likeTerm.Value);
                         }
                     }
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
