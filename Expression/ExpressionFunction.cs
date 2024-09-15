@@ -372,6 +372,46 @@ namespace BetterNumberSystem.Expression
                 },
                 new ExpressionFunctionInputs(one: true)
             );
+             
+             _ = new ExpressionFunction("Cosine", "cos",
+                (ExpressionFunctionInputs inputs) =>
+                {
+                    LikeTermsCollection likeTerms = [];
+                    
+                    foreach(var likeTerm in inputs.Inputs[0].ToLikeTermsCollection())
+                    {
+                        if (likeTerms.ContainsKey(likeTerm.Key)) {
+                            List<ExpressionTerm> terms = likeTerms[likeTerm.Key];
+                            terms.AddRange(likeTerm.Value);
+                            likeTerms[likeTerm.Key] = terms;
+                        } else
+                            likeTerms.Add(likeTerm.Key, likeTerm.Value);
+                    }
+                    
+                    // Assuming we're only dealing with numbers (no vectors or matrices yet)
+                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                        foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
+                            if (expressionTerm.Value is not Number) throw new NotImplementedException();
+
+                    if((likeTerms.First().Value[0].Value as Number).MeasurementType != MeasurementType.Angle) throw new ArgumentException("Sine function only works with angles");
+                    
+                    LikeTermsCollection output = [];
+
+                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    {
+                        List<Pronumeral> pronumerals = likeTermCollection.Key;
+                        Number angle = likeTermCollection.Value[0].Value as Number;
+                        double angleInRads;
+                        if(angle.Unit == UnitManager.Units["Degree"]) angleInRads = angle.NumericValue * Math.PI / 180;
+                        else if(angle.Unit == UnitManager.Units["Radian"]) angleInRads = angle.NumericValue;
+                        else throw new ArgumentException("Cosine function only works with angles");
+                        
+                        output.Add(pronumerals, [(ExpressionTerm)new Number(Math.Cos(angleInRads), UnitManager.Units["Plain"])]);
+                    }
+                    return output;
+                },
+                new ExpressionFunctionInputs(one: true)
+            );
         }
     }
 }
