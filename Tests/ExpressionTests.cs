@@ -56,6 +56,16 @@ public class ExpressionTests
         Assert.AreEqual(expression.Evaluate().ToString(), "1.03m");
     }
     
+    /// <summary>
+    /// Tests the sine function
+    /// </summary>
+    [Test]
+    public void SineTest()
+    {
+        Number angle = new(1, UnitManager.Units["Radian"]);
+        Expression.Expression expression = new(FunctionManager.Get("Sine", [new ExpressionGroup(angle)]));
+        Assert.AreEqual((expression.Evaluate()[[Pronumeral.NO_PRONUMERAL]][0].Value as Number).NumericValue, Math.Sin(1));
+    }
 
     /// <summary>
     /// Tests the cosine function

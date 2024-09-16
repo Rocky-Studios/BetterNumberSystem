@@ -56,6 +56,9 @@ namespace BetterNumberSystem.Expression
     /// The computations that happen when a function is evaluated.
     /// </summary>
     public delegate LikeTermsCollection MathFunction(ExpressionFunctionInputs inputs);
+    
+    public delegate LikeTermsCollection OnEvaluate(LikeTermsCollection[] inputs);
+    
     /// <summary>
     /// Defines the structure of expression inputs.
     /// </summary>
