@@ -20,9 +20,9 @@ namespace BetterNumberSystem.Expression
         };
     }
 
-    public class PronumeralListEqualityComparer : IEqualityComparer<List<Pronumeral>>
+    public class PronumeralListEqualityComparer : IEqualityComparer<List<(Pronumeral, int)>>
     {
-        public bool Equals(List<Pronumeral> x, List<Pronumeral> y)
+        public bool Equals(List<(Pronumeral, int)> x, List<(Pronumeral, int)> y)
         {
             if (x == null || y == null)
                 return x == y;
@@ -30,12 +30,12 @@ namespace BetterNumberSystem.Expression
             return x.Count == y.Count && !x.Except(y).Any();
         }
 
-        public int GetHashCode(List<Pronumeral> obj)
+        public int GetHashCode(List<(Pronumeral, int)> obj)
         {
             // Use a combination of pronumeral hashes to generate a hash code for the list
             unchecked
             {
-                return obj.Aggregate(0, (current, pronumeral) => current * 397 ^ (pronumeral?.GetHashCode() ?? 0));
+                return obj.Aggregate(0, (current, pronumeral) => current * 397 ^ (pronumeral.Item1?.GetHashCode() ?? 0));
             }
         }
     }

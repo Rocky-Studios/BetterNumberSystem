@@ -204,15 +204,15 @@ namespace BetterNumberSystem.Expression
                         }
                     }
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    foreach (KeyValuePair<List<(Pronumeral, int)>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
                             if (expressionTerm.Value is not Number) throw new NotImplementedException();
 
                     LikeTermsCollection output = [];
 
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    foreach (KeyValuePair<List<(Pronumeral, int)>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                     {
-                        List<Pronumeral> pronumerals = likeTermCollection.Key;
+                        List<(Pronumeral, int)> pronumerals = likeTermCollection.Key;
                         Number total = new(0, (likeTermCollection.Value[0].Value as Number).Unit);
 
                         foreach (ExpressionTerm t in likeTermCollection.Value)
@@ -304,7 +304,7 @@ namespace BetterNumberSystem.Expression
 
                             foreach (var likeTermCollection in likeTermsA)
                             {
-                                List<Pronumeral> pronumerals = likeTermCollection.Key;
+                                List<(Pronumeral, int)> pronumerals = likeTermCollection.Key;
                                 Number total = new(0, (likeTermCollection.Value[0].Value as Number).Unit);
                             
                                 foreach (ExpressionTerm t in likeTermCollection.Value)
@@ -352,7 +352,7 @@ namespace BetterNumberSystem.Expression
                     }
                     
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    foreach (KeyValuePair<List<(Pronumeral, int)>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
                             if (expressionTerm.Value is not Number) throw new NotImplementedException();
 
@@ -360,9 +360,9 @@ namespace BetterNumberSystem.Expression
                     
                     LikeTermsCollection output = [];
 
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    foreach (KeyValuePair<List<(Pronumeral, int)>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                     {
-                        List<Pronumeral> pronumerals = likeTermCollection.Key;
+                        List<(Pronumeral, int)> pronumerals = likeTermCollection.Key;
                         Number angle = likeTermCollection.Value[0].Value as Number;
                         double angleInRads;
                         if(angle.Unit == UnitManager.Units["Degree"]) angleInRads = angle.NumericValue * Math.PI / 180;
@@ -392,7 +392,7 @@ namespace BetterNumberSystem.Expression
                     }
                     
                     // Assuming we're only dealing with numbers (no vectors or matrices yet)
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    foreach (KeyValuePair<List<(Pronumeral, int)>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
                             if (expressionTerm.Value is not Number) throw new NotImplementedException();
 
@@ -400,9 +400,9 @@ namespace BetterNumberSystem.Expression
                     
                     LikeTermsCollection output = [];
 
-                    foreach (KeyValuePair<List<Pronumeral>, List<ExpressionTerm>> likeTermCollection in likeTerms)
+                    foreach (KeyValuePair<List<(Pronumeral, int)>, List<ExpressionTerm>> likeTermCollection in likeTerms)
                     {
-                        List<Pronumeral> pronumerals = likeTermCollection.Key;
+                        List<(Pronumeral, int)> pronumerals = likeTermCollection.Key;
                         Number angle = likeTermCollection.Value[0].Value as Number;
                         double angleInRads;
                         if(angle.Unit == UnitManager.Units["Degree"]) angleInRads = angle.NumericValue * Math.PI / 180;

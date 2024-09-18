@@ -18,7 +18,7 @@ namespace BetterNumberSystem.Expression
         public static implicit operator ExpressionPart(Number num) => new ExpressionTerm()
         {
             Value = num,
-            Pronumerals = [Pronumeral.NO_PRONUMERAL]
+            Pronumerals = [(Pronumeral.NO_PRONUMERAL, 1)]
         };
     }
     /// <summary>
@@ -31,9 +31,11 @@ namespace BetterNumberSystem.Expression
         /// </summary>
         public IExpressionValue Value;
         /// <summary>
-        /// The variables or constants of the term.
+        /// The variables or constants of the term. <br/>
+        /// Item1: The pronumeral. <br/>
+        /// Item2: The power of the pronumeral.
         /// </summary>
-        public List<Pronumeral> Pronumerals;
+        public List<(Pronumeral, int)> Pronumerals;
 
         /// <summary>
         /// Shows the coefficient and pronumerals of the term as text.
@@ -42,9 +44,12 @@ namespace BetterNumberSystem.Expression
         public override string ToString()
         {
             string pronumerals = "";
-            foreach (Pronumeral pronumeral in Pronumerals)
+            foreach (var pronumeral in Pronumerals)
             {
-                pronumerals += pronumeral.Symbol;
+                bool powerIsOne = pronumeral.Item2 == 1;
+                pronumerals += pronumeral.Item1.Symbol;
+                if (!powerIsOne) pronumerals += "^" + pronumeral.Item2;
+                
             }
             return Value.ToString() + pronumerals;
         }
@@ -113,7 +118,7 @@ namespace BetterNumberSystem.Expression
             }
             foreach (var term in terms)
             {
-                List<Pronumeral> pronumerals = term.Pronumerals;
+                List< (Pronumeral, int)> pronumerals = term.Pronumerals;
 
                 if (!likeTerms.TryGetValue(pronumerals, out List<ExpressionTerm>? value))
                 {

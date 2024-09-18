@@ -64,7 +64,7 @@ public class ExpressionTests
     {
         Number angle = new(1, UnitManager.Units["Radian"]);
         Expression.Expression expression = new(FunctionManager.Get("Sine", [new ExpressionGroup(angle)]));
-        Assert.AreEqual((expression.Evaluate()[[Pronumeral.NO_PRONUMERAL]][0].Value as Number).NumericValue, Math.Sin(1));
+        Assert.AreEqual((expression.Evaluate()[[(Pronumeral.NO_PRONUMERAL, 1)]][0].Value as Number).NumericValue, Math.Sin(1));
     }
 
     /// <summary>
@@ -75,6 +75,6 @@ public class ExpressionTests
     {
         Number angle = new(1, UnitManager.Units["Radian"]);
         Expression.Expression expression = new(FunctionManager.Get("Cosine", [new ExpressionGroup(angle)]));
-        Assert.AreEqual((expression.Evaluate()[[Pronumeral.NO_PRONUMERAL]][0].Value as Number).NumericValue, Math.Cos(1));
+        Assert.AreEqual((expression.Evaluate()[[(Pronumeral.NO_PRONUMERAL, 1)]][0].Value as Number).NumericValue, Math.Cos(1));
     }
 }

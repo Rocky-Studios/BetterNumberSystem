@@ -9,7 +9,7 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// Represents a collection of terms grouped by their pronumerals.
     /// </summary>
-    public class LikeTermsCollection : Dictionary<List<Pronumeral>, List<ExpressionTerm>>
+    public class LikeTermsCollection : Dictionary<List<(Pronumeral, int)>, List<ExpressionTerm>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LikeTermCollection"/> class 
@@ -27,19 +27,9 @@ namespace BetterNumberSystem.Expression
         {
             string output = "";
             foreach (var likeTerms in this)
-            {
                 foreach (ExpressionTerm term in likeTerms.Value)
-                {
-                    output += term.Value;
-                    foreach (Pronumeral pronumeral in likeTerms.Key)
-                    {
-                        output += pronumeral.Symbol;
-                    }
-                    output += ", ";
-                }
-               
-            }
+                    output += (term.ToString() + ", ");
             return output[..^2];
-        }
+        }   
     }
 }
