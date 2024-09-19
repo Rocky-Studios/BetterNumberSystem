@@ -89,6 +89,30 @@ namespace BetterNumberSystem.Expression
             Symbol = "e",
             Value = new Number(MathF.E)
         };
+        /// <summary>
+        /// The imaginary unit, such that i^2 = -1
+        /// </summary>
+        public static Constant I = new Constant()
+        {
+            Name = "i",
+            Symbol = "i",
+            Value = new ExpressionTerm()
+            { 
+                Value = new Number(0),
+                Pronumerals = [
+                    (Pronumeral.NO_PRONUMERAL, 0)]
+            }
+        };
+        
+        /// <summary>
+        /// The length of a regular pentagon's diagonal is its side times the golden ratio
+        /// </summary>
+        public static Constant GOLDEN_RATIO = new Constant()
+        {
+            Name = "Golden Ratio",
+            Symbol = "φ",
+            Value = new Number((1 + MathF.Sqrt(5)) / 2)
+        };
         #endregion
 
         #region SI Defining Constants
