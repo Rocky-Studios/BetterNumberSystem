@@ -19,7 +19,7 @@ namespace BetterNumberSystem
         /// <summary>
         /// The measurement category
         /// </summary>
-        public MeasurementType MeasurementType = MeasurementType.Plain;
+        public Quantity Quantity = Quantity.Plain;
 
         /// <summary>
         /// The measurement unit
@@ -36,7 +36,7 @@ namespace BetterNumberSystem
         public Number()
         {
             NumericValue = 0;
-            MeasurementType = MeasurementType.Plain;
+            Quantity = Quantity.Plain;
             Unit = UnitManager.Unit["Plain"];
         }
 
@@ -46,10 +46,10 @@ namespace BetterNumberSystem
         /// <param name="numericValue">The numerical value of the number</param>
         /// <param name="measurementType">The category of measurement</param>
         /// <param name="unit">The unit of measurement</param>
-        public Number(double numericValue = 0, Unit? unit = null, MeasurementType? measurementType = null)
+        public Number(double numericValue = 0, Unit? unit = null, Quantity? measurementType = null)
         {
             Unit = unit ?? UnitManager.Unit["Plain"];
-            MeasurementType = measurementType ?? Unit.MeasurementType;
+            Quantity = measurementType ?? Unit.Quantity;
             if (numericValue < 0 && !Unit.CanBeNegative)
                 throw new ArgumentException(Unit.FullName + " cannot be negative");
             else NumericValue = numericValue;
@@ -87,7 +87,7 @@ namespace BetterNumberSystem
             if (parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
             output.Unit = parsedNumberUnit;
 
-            output.MeasurementType = output.Unit.MeasurementType;
+            output.Quantity = output.Unit.Quantity;
 
             return output;
         }
@@ -132,7 +132,7 @@ namespace BetterNumberSystem
 
                 if (type)
                 {
-                    outputString += " " + MeasurementType.ToString();
+                    outputString += " " + Quantity.ToString();
                 }
             }
             else
@@ -146,7 +146,7 @@ namespace BetterNumberSystem
 
                 if (type)
                 {
-                    outputString += " " + MeasurementType.ToString();
+                    outputString += " " + Quantity.ToString();
                 }
             }
 
@@ -163,10 +163,10 @@ namespace BetterNumberSystem
         /// <exception cref="ArgumentException">Implicit conversion not possible</exception>
         public Number Convert(Unit targetUnit)
         {
-            if (MeasurementType != (targetUnit as Unit).MeasurementType)
+            if (Quantity != (targetUnit as Unit).Quantity)
             {
-                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " +
-                                            targetUnit.MeasurementType + ". Did you intend to use a math function?");
+                throw new ArgumentException("Cannot implicitly convert " + Quantity + " to " +
+                                            targetUnit.Quantity + ". Did you intend to use a math function?");
             }
 
             double valueInBaseUnit = Unit.ToBaseUnit(NumericValue);
@@ -174,7 +174,7 @@ namespace BetterNumberSystem
             // Convert from base unit to the target unit
             double convertedValue = targetUnit.FromBaseUnit(valueInBaseUnit);
 
-            return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
+            return new Number(convertedValue, targetUnit, targetUnit.Quantity);
         }
 
         /// <summary>
@@ -186,10 +186,10 @@ namespace BetterNumberSystem
         public Number Convert(string unit)
         {
             Unit targetUnit = UnitManager.Units[unit];
-            if (MeasurementType != (targetUnit as Unit).MeasurementType)
+            if (Quantity != (targetUnit as Unit).Quantity)
             {
-                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " +
-                                            targetUnit.MeasurementType + ". Did you intend to use a math function?");
+                throw new ArgumentException("Cannot implicitly convert " + Quantity + " to " +
+                                            targetUnit.Quantity + ". Did you intend to use a math function?");
             }
 
             double valueInBaseUnit = Unit.ToBaseUnit(NumericValue);
@@ -197,7 +197,7 @@ namespace BetterNumberSystem
             // Convert from base unit to the target unit
             double convertedValue = targetUnit.FromBaseUnit(valueInBaseUnit);
 
-            return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
+            return new Number(convertedValue, targetUnit, targetUnit.Quantity);
         }
 
         #endregion
@@ -226,7 +226,7 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public static bool operator ==(Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
+            if (a.Quantity != b.Quantity)
             {
                 return false;
             }
@@ -253,8 +253,8 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return (MeasurementType.GetHashCode() + NumericValue.GetHashCode() - Unit.GetHashCode()) *
-                   (MeasurementType.GetHashCode() - NumericValue.GetHashCode() + Unit.GetHashCode());
+            return (Quantity.GetHashCode() + NumericValue.GetHashCode() - Unit.GetHashCode()) *
+                   (Quantity.GetHashCode() - NumericValue.GetHashCode() + Unit.GetHashCode());
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public static bool operator !=(Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
+            if (a.Quantity != b.Quantity)
             {
                 return false;
             }
@@ -282,7 +282,7 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public static bool operator >(Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
+            if (a.Quantity != b.Quantity)
             {
                 return false;
             }
@@ -299,7 +299,7 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public static bool operator <(Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
+            if (a.Quantity != b.Quantity)
             {
                 return false;
             }
@@ -316,7 +316,7 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public static bool operator >=(Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
+            if (a.Quantity != b.Quantity)
             {
                 return false;
             }
@@ -333,7 +333,7 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public static bool operator <=(Number a, Number b)
         {
-            if (a.MeasurementType != b.MeasurementType)
+            if (a.Quantity != b.Quantity)
             {
                 return false;
             }
@@ -374,39 +374,39 @@ namespace BetterNumberSystem
 
         public static Number operator *(Number a, Number b)
         {
-            switch (a.MeasurementType)
+            switch (a.Quantity)
             {
-                case MeasurementType.Length:
-                    if (b.MeasurementType == MeasurementType.Length)
+                case Quantity.Length:
+                    if (b.Quantity == Quantity.Length)
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
                             Unit.GetNumberUnitByFullName("Sq" + a.Unit.FullName),
-                            MeasurementType.Area
+                            Quantity.Area
                         );
                     }
-                    else if (b.MeasurementType == MeasurementType.Area)
+                    else if (b.Quantity == Quantity.Area)
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
                             Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName),
-                            MeasurementType.Volume
+                            Quantity.Volume
                         );
                     }
 
                     break;
-                case MeasurementType.Area:
-                    if (b.MeasurementType == MeasurementType.Area)
+                case Quantity.Area:
+                    if (b.Quantity == Quantity.Area)
                     {
                         throw new Exception();
                     }
-                    else if (b.MeasurementType == MeasurementType.Length)
+                    else if (b.Quantity == Quantity.Length)
                     {
                         return new Number(
                             (float)(a.NumericValue * a.NumericValue) * ((float)b
                                 .Convert(Unit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
                             Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", "")),
-                            MeasurementType.Volume
+                            Quantity.Volume
                         );
                     }
 

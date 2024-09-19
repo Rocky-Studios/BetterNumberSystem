@@ -356,7 +356,7 @@ namespace BetterNumberSystem.Expression
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
                             if (expressionTerm.Value is not Number) throw new NotImplementedException();
 
-                    if((likeTerms.First().Value[0].Value as Number).MeasurementType != MeasurementType.Angle) throw new ArgumentException("Sine function only works with angles");
+                    if((likeTerms.First().Value[0].Value as Number).Quantity != Quantity.Angle) throw new ArgumentException("Sine function only works with angles");
                     
                     LikeTermsCollection output = [];
 
@@ -396,7 +396,7 @@ namespace BetterNumberSystem.Expression
                         foreach (ExpressionTerm expressionTerm in likeTermCollection.Value)
                             if (expressionTerm.Value is not Number) throw new NotImplementedException();
 
-                    if((likeTerms.First().Value[0].Value as Number).MeasurementType != MeasurementType.Angle) throw new ArgumentException("Sine function only works with angles");
+                    if((likeTerms.First().Value[0].Value as Number).Quantity != Quantity.Angle) throw new ArgumentException("Sine function only works with angles");
                     
                     LikeTermsCollection output = [];
 
