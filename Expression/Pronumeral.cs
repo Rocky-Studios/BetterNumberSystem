@@ -10,7 +10,7 @@ namespace BetterNumberSystem.Expression
     {
         public string Symbol { get; set; }
         public string Name { get; set; }
-        public IExpressionValue Value { get; set; }
+        public ExpressionTerm Value { get; set; }
 
         public static Pronumeral NO_PRONUMERAL = new Pronumeral()
         {
@@ -18,6 +18,13 @@ namespace BetterNumberSystem.Expression
             Name = "",
             Value = null
         };
+
+        public static List<Pronumeral> Pronumerals = [];
+        
+        public override string ToString()
+        {
+            return $"{Value}";
+        }
     }
 
     public class PronumeralListEqualityComparer : IEqualityComparer<List<(Pronumeral, int)>>
@@ -44,15 +51,25 @@ namespace BetterNumberSystem.Expression
     {
         public string Symbol { get; set; }
         public string Name { get; set; }
-        public IExpressionValue Value { get; set; }
+        public ExpressionTerm Value { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Value}";
+        }
     }
 
     public class Constant : Pronumeral
     {
         public string Symbol { get; set; }
         public string Name { get; set; }
-        public IExpressionValue Value { get; set; }
-
+        public ExpressionTerm Value { get; set; }
+        
+        public override string ToString()
+        {
+            return $"{Value}";
+        }
+        
         #region Mathematical Constants
         /// <summary>
         /// A circle's circumference divided by its diameter
@@ -83,7 +100,12 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Hyperfine Transition Frequency of Cs-133",
             Symbol = "ΔνCs",
-            Value = new Number(9192631770)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(9192631770),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "hz"), 1)]
+            }
         };
         /// <summary>
         ///     The speed of light in a vacuum
@@ -92,7 +114,13 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Speed of Light",
             Symbol = "c",
-            Value = new Number(299792458)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(299792458),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "m"), 1),
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "s"), -1)]
+            }
         };
         /// <summary>
         ///     The ground state hyperfine splitting frequency of caesium-133
@@ -101,7 +129,13 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Planck Constant",
             Symbol = "h",
-            Value = new Number(6.62607015e-34)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(6.62607015e-34),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "J"), 1),
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "hz"), -1)]
+            }
         };
         /// <summary>
         ///     The charge of a single electron
@@ -110,7 +144,12 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Elementary Charge",
             Symbol = "e",
-            Value = new Number(1.602176634e-19)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(1.602176634e-19),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "C"), 1)]
+            }
         };
         /// <summary>
         ///     The mass of a single electron
@@ -119,7 +158,13 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Boltzmann Constant",
             Symbol = "k",
-            Value = new Number(1.380649e-23)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(1.380649e-23),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "J"), 1),
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "K"), -1)]
+            }
         };
         /// <summary>
         ///     The number of constituent particles per mole
@@ -128,7 +173,12 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Avogadro Constant",
             Symbol = "NA",
-            Value = new Number(6.02214076e23)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(6.02214076e+23),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "mol"), -1)]
+            }
         };
         /// <summary>
         ///     The luminous efficacy of monochromatic radiation of frequency 540 THz
@@ -137,7 +187,13 @@ namespace BetterNumberSystem.Expression
         {
             Name = "Luminous Efficacy",
             Symbol = "Kcd",
-            Value = new Number(683)
+            Value = new ExpressionTerm()
+            {
+                Value = new Number(683 ),
+                Pronumerals = [
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "lm"), 1),
+                    (Pronumeral.Pronumerals.Find(P => P.Symbol == "W"), -1)]
+            }
         };
 
         #endregion

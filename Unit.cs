@@ -1,4 +1,6 @@
-﻿namespace BetterNumberSystem
+﻿using BetterNumberSystem.Expression;
+
+namespace BetterNumberSystem
 {
     /// <summary>
     /// A singular unit of measurement
@@ -201,7 +203,7 @@
 
             //https://en.wikipedia.org/wiki/International_System_of_Units#Derived_units
             // DERVIED UNITS
-            _ = new Unit("Hertz", "Hz", MeasurementType.Frequency, generatePrefixes: true) { FullNamePlural = "Hertz" };
+            _ = new Unit("Hertz", "hz", MeasurementType.Frequency, generatePrefixes: true) { FullNamePlural = "Hertz" };
             _ = new Unit("Newton", "N", MeasurementType.Force, generatePrefixes: true);
             _ = new Unit("Pascal", "Pa", MeasurementType.Pressure, generatePrefixes: true);
             _ = new Unit("Joule", "J", MeasurementType.Energy, generatePrefixes: true);
@@ -215,6 +217,8 @@
             _ = new Unit("Tesla", "T", MeasurementType.MagneticFieldStrength, generatePrefixes: true);
             _ = new Unit("Henry", "H", MeasurementType.Inductance, generatePrefixes: true) { FullNamePlural = "Henries" };
             _ = new Unit("Lux", "lx", MeasurementType.Illuminance, generatePrefixes: true) { FullNamePlural = "Luxes" };
+            _ = new Unit("Lumen", "lm", MeasurementType.Illuminance, generatePrefixes: true);
+            _ = new Unit("Mole", "mol", MeasurementType.AmountOfSubstance, generatePrefixes: true);
 
             // Units with weird conversions / units that do not use the metric prefixes
             _ = new Unit("Radian", "rad", MeasurementType.Angle, Radians => Radians, Radians => Radians, canBeNegative: true);
@@ -222,6 +226,20 @@
 
             _ = new Unit("Kelvin", "K", MeasurementType.Temperature, Kelvin => Kelvin, Kelvin => Kelvin, canBeNegative: false);
             _ = new Unit("Celsius", "°C", MeasurementType.Temperature, Kelvin => Kelvin + 273.15, Kelvin => Kelvin - 273.15, canBeNegative: false);
+
+            foreach (var unit in Units)
+            {
+                Pronumeral.Pronumerals.Add(new Pronumeral()
+                {
+                    Name = unit.Value.FullName,
+                    Symbol = unit.Value.Suffix,
+                    Value = new ExpressionTerm()
+                    {
+                        Value = new Number(),
+                        Pronumerals = [(Pronumeral.NO_PRONUMERAL, 1)]
+                    }
+                });
+            }
         }
     }
 }

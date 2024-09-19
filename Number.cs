@@ -10,6 +10,7 @@ namespace BetterNumberSystem
     public class Number : IExpressionValue
     {
         #region Fields
+
         /// <summary>
         /// The numerical value of the number
         /// </summary>
@@ -24,8 +25,11 @@ namespace BetterNumberSystem
         /// The measurement unit
         /// </summary>
         public Unit Unit = UnitManager.Unit["Plain"];
+
         #endregion
+
         #region Constructors
+
         /// <summary>
         /// Generates a plain number (0)
         /// </summary>
@@ -35,6 +39,7 @@ namespace BetterNumberSystem
             MeasurementType = MeasurementType.Plain;
             Unit = UnitManager.Unit["Plain"];
         }
+
         /// <summary>
         /// Generates a number with custom parameters
         /// </summary>
@@ -45,10 +50,13 @@ namespace BetterNumberSystem
         {
             Unit = unit ?? UnitManager.Unit["Plain"];
             MeasurementType = measurementType ?? Unit.MeasurementType;
-            if (numericValue < 0 && !Unit.CanBeNegative) throw new ArgumentException(Unit.FullName + " cannot be negative");
+            if (numericValue < 0 && !Unit.CanBeNegative)
+                throw new ArgumentException(Unit.FullName + " cannot be negative");
             else NumericValue = numericValue;
         }
+
         #endregion
+
         /// <summary>
         /// Converts a string of number data into the Number class
         /// </summary>
@@ -60,12 +68,14 @@ namespace BetterNumberSystem
             {
                 throw new ArgumentException("Please provide a valid number data string.");
             }
+
             string pattern = @"^(-?\d+(\.\d+)?)(\S*)";
             Match match = Regex.Match(numberData, pattern);
             if (!match.Success)
             {
                 throw new ArgumentException("Please provide a valid number data string.");
             }
+
             Number output = new Number();
 
             // Numerical value
@@ -76,7 +86,7 @@ namespace BetterNumberSystem
             Unit parsedNumberUnit = Unit.GetNumberUnitBySuffix(match.Groups[3].Value);
             if (parsedNumberUnit == null) throw new ArgumentException("Number data string had invalid unit.");
             output.Unit = parsedNumberUnit;
-            
+
             output.MeasurementType = output.Unit.MeasurementType;
 
             return output;
@@ -106,6 +116,7 @@ namespace BetterNumberSystem
                 //Plain
                 return NumericValue;
             }
+
             string outputString = "";
             if (!scientific)
             {
@@ -113,10 +124,12 @@ namespace BetterNumberSystem
                 {
                     outputString += NumericValue;
                 }
+
                 if (unit)
                 {
                     outputString += Unit.Suffix;
                 }
+
                 if (type)
                 {
                     outputString += " " + MeasurementType.ToString();
@@ -130,15 +143,18 @@ namespace BetterNumberSystem
                 {
                     outputString += Unit.ToString();
                 }
+
                 if (type)
                 {
                     outputString += " " + MeasurementType.ToString();
                 }
             }
+
             return outputString;
         }
 
         #region Convert
+
         /// <summary>
         /// Converts a number to a different unit
         /// </summary>
@@ -147,9 +163,10 @@ namespace BetterNumberSystem
         /// <exception cref="ArgumentException">Implicit conversion not possible</exception>
         public Number Convert(Unit targetUnit)
         {
-            if(MeasurementType != (targetUnit as Unit).MeasurementType)
+            if (MeasurementType != (targetUnit as Unit).MeasurementType)
             {
-                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + targetUnit.MeasurementType + ". Did you intend to use a math function?");
+                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " +
+                                            targetUnit.MeasurementType + ". Did you intend to use a math function?");
             }
 
             double valueInBaseUnit = Unit.ToBaseUnit(NumericValue);
@@ -159,6 +176,7 @@ namespace BetterNumberSystem
 
             return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
         }
+
         /// <summary>
         /// Converts a number to a different unit
         /// </summary>
@@ -170,7 +188,8 @@ namespace BetterNumberSystem
             Unit targetUnit = UnitManager.Units[unit];
             if (MeasurementType != (targetUnit as Unit).MeasurementType)
             {
-                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " + targetUnit.MeasurementType + ". Did you intend to use a math function?");
+                throw new ArgumentException("Cannot implicitly convert " + MeasurementType + " to " +
+                                            targetUnit.MeasurementType + ". Did you intend to use a math function?");
             }
 
             double valueInBaseUnit = Unit.ToBaseUnit(NumericValue);
@@ -180,6 +199,7 @@ namespace BetterNumberSystem
 
             return new Number(convertedValue, targetUnit, targetUnit.MeasurementType);
         }
+
         #endregion
 
         private static string ToScientificNotation(double number)
@@ -192,25 +212,29 @@ namespace BetterNumberSystem
             {
                 mantissaStr = mantissaStr.Substring(0, doubleIndex + 11);
             }
+
             return $"{mantissaStr} x 10^{exponent}";
         }
 
         #region Logic
+
         /// <summary>
         /// Whether two numbers have the same value when their units are converted
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static bool operator == (Number a, Number b)
+        public static bool operator ==(Number a, Number b)
         {
             if (a.MeasurementType != b.MeasurementType)
             {
                 return false;
             }
+
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue == bConverted.NumericValue;
         }
+
         /// <summary>
         /// Whether two objects (have to be numbers) have equal value
         /// </summary>
@@ -229,7 +253,8 @@ namespace BetterNumberSystem
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return (MeasurementType.GetHashCode() + NumericValue.GetHashCode() - Unit.GetHashCode()) * (MeasurementType.GetHashCode() - NumericValue.GetHashCode() + Unit.GetHashCode());
+            return (MeasurementType.GetHashCode() + NumericValue.GetHashCode() - Unit.GetHashCode()) *
+                   (MeasurementType.GetHashCode() - NumericValue.GetHashCode() + Unit.GetHashCode());
         }
 
         /// <summary>
@@ -244,9 +269,11 @@ namespace BetterNumberSystem
             {
                 return false;
             }
+
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue != bConverted.NumericValue;
         }
+
         /// <summary>
         /// Whether number a is greater than number b
         /// </summary>
@@ -259,9 +286,11 @@ namespace BetterNumberSystem
             {
                 return false;
             }
+
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue > bConverted.NumericValue;
         }
+
         /// <summary>
         /// Whether number a is less than number b
         /// </summary>
@@ -274,9 +303,11 @@ namespace BetterNumberSystem
             {
                 return false;
             }
+
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue < bConverted.NumericValue;
         }
+
         /// <summary>
         /// Whether number a is greater than or equal to number b
         /// </summary>
@@ -289,9 +320,11 @@ namespace BetterNumberSystem
             {
                 return false;
             }
+
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue >= bConverted.NumericValue;
         }
+
         /// <summary>
         /// Whether number a is less than or equal to number b
         /// </summary>
@@ -304,11 +337,15 @@ namespace BetterNumberSystem
             {
                 return false;
             }
+
             Number bConverted = b.Convert(a.Unit);
             return a.NumericValue <= bConverted.NumericValue;
         }
+
         #endregion
+
         #region Math
+
         /// <summary>
         /// Adds two numbers, giving the output in terms of the first number
         /// </summary>
@@ -316,10 +353,12 @@ namespace BetterNumberSystem
         /// <param name="b"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static Expression.Expression operator + (Number a, Number b)
+        public static Expression.Expression operator +(Number a, Number b)
         {
-            return new Expression.Expression(FunctionManager.Get("Sum", [new ExpressionGroup(a), new ExpressionGroup(b)]));
+            return new Expression.Expression(FunctionManager.Get("Sum",
+                [new ExpressionGroup(a), new ExpressionGroup(b)]));
         }
+
         /// <summary>
         /// Subtracts two numbers, giving the output in terms of the first number
         /// </summary>
@@ -327,9 +366,10 @@ namespace BetterNumberSystem
         /// <param name="b"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static Expression.Expression operator - (Number a, Number b)
+        public static Expression.Expression operator -(Number a, Number b)
         {
-            return new Expression.Expression(FunctionManager.Get("Difference", [new ExpressionGroup(a), new ExpressionGroup(b)]));
+            return new Expression.Expression(FunctionManager.Get("Difference",
+                [new ExpressionGroup(a), new ExpressionGroup(b)]));
         }
 
         public static Number operator *(Number a, Number b)
@@ -337,22 +377,23 @@ namespace BetterNumberSystem
             switch (a.MeasurementType)
             {
                 case MeasurementType.Length:
-                    if(b.MeasurementType == MeasurementType.Length)
+                    if (b.MeasurementType == MeasurementType.Length)
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
                             Unit.GetNumberUnitByFullName("Sq" + a.Unit.FullName),
                             MeasurementType.Area
-                            );
+                        );
                     }
-                    else if(b.MeasurementType == MeasurementType.Area)
+                    else if (b.MeasurementType == MeasurementType.Area)
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
                             Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName),
                             MeasurementType.Volume
-                            );
+                        );
                     }
+
                     break;
                 case MeasurementType.Area:
                     if (b.MeasurementType == MeasurementType.Area)
@@ -362,15 +403,28 @@ namespace BetterNumberSystem
                     else if (b.MeasurementType == MeasurementType.Length)
                     {
                         return new Number(
-                            (float)(a.NumericValue * a.NumericValue) * ((float)b.Convert(Unit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
+                            (float)(a.NumericValue * a.NumericValue) * ((float)b
+                                .Convert(Unit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
                             Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", "")),
                             MeasurementType.Volume
-                            );
+                        );
                     }
+
                     break;
             }
+
             throw new NotImplementedException();
         }
+
         #endregion
+
+        public static implicit operator ExpressionTerm(Number value)
+        {
+            return new ExpressionTerm()
+            {
+                Pronumerals = [(Pronumeral.NO_PRONUMERAL, 1)],
+                Value = value
+            };
+        }
     }
 }

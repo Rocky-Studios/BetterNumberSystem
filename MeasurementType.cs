@@ -125,6 +125,13 @@ namespace BetterNumberSystem
         /// 
         /// </summary>
         Radioactivity,
-
+        /// <summary>
+        /// How much there is of something
+        /// </summary>
+        AmountOfSubstance,
+        /// <summary>
+        /// How much light is emitted by a source
+        /// </summary>
+        LuminousIntensity,
     }
 }
