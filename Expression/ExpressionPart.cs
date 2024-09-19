@@ -35,7 +35,7 @@ namespace BetterNumberSystem.Expression
         /// Item1: The pronumeral. <br/>
         /// Item2: The power of the pronumeral.
         /// </summary>
-        public List<(Pronumeral, int)> Pronumerals;
+        public PronumeralCollection Pronumerals;
 
         /// <summary>
         /// Shows the coefficient and pronumerals of the term as text.
@@ -118,7 +118,7 @@ namespace BetterNumberSystem.Expression
             }
             foreach (var term in terms)
             {
-                List< (Pronumeral, int)> pronumerals = term.Pronumerals;
+                PronumeralCollection pronumerals = term.Pronumerals;
 
                 if (!likeTerms.TryGetValue(pronumerals, out List<ExpressionTerm>? value))
                 {

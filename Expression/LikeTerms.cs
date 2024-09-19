@@ -9,7 +9,7 @@ namespace BetterNumberSystem.Expression
     /// <summary>
     /// Represents a collection of terms grouped by their pronumerals.
     /// </summary>
-    public class LikeTermsCollection : Dictionary<List<(Pronumeral, int)>, List<ExpressionTerm>>
+    public class LikeTermsCollection : Dictionary<PronumeralCollection, List<ExpressionTerm>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LikeTermCollection"/> class 
