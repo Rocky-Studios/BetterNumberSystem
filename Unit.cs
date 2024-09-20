@@ -43,19 +43,24 @@ namespace BetterNumberSystem
         /// Function to convert from the base unit to this unit
         /// </summary>
         public ConversionFunction FromBaseUnit { get; set; }
-
-
+        /// <summary>
+        /// This unit expressed in terms of the base units
+        /// NOTE: if this is a base unit, this will be an empty array
+        /// </summary>
+        public PronumeralCollection? UnitAsBaseUnits = []; 
         #endregion
+
+        #region Constructors
         /// <summary>
         /// Initialises a number unit
         /// </summary>
         /// <param name="fullName">The full name</param>
         /// <param name="suffix">The suffix after a number</param>
         /// <param name="quantity">Which category of measurement it goes into</param>
-        /// <param name="baseUnit">Whether this is the standard base unit used in conversions</param>
-        /// <param name="proportionalToBaseUnit">How many base units equal one of these</param>
+        /// <param name="toBaseUnit">The conversion function from this to the base unit</param>
+        /// <param name="fromBaseUnit">The conversion function from the base unit to this unit</param>
         /// <param name="canBeNegative">Whether this value can be negative</param>
-        public Unit(string fullName, string suffix, Quantity quantity, ConversionFunction toBaseUnit, ConversionFunction fromBaseUnit, bool canBeNegative = false)
+        public Unit(string fullName, string suffix, Quantity quantity, bool generatePrefixes, ConversionFunction toBaseUnit = null, ConversionFunction fromBaseUnit = null, bool canBeNegative = false, PronumeralCollection unitAsBaseUnits = null)
         {
             FullName = fullName;
             FullNamePlural = fullName + "s";
@@ -64,31 +69,19 @@ namespace BetterNumberSystem
             FromBaseUnit = fromBaseUnit;
             Quantity = quantity;
             CanBeNegative = canBeNegative;
-            UnitManager.Units.Add(fullName, this);
-        }
-        /// <summary>
-        /// Initialises a number unit
-        /// </summary>
-        /// <param name="fullName">The full name</param>
-        /// <param name="suffix">The suffix after a number</param>
-        /// <param name="quantity">Which category of measurement it goes into</param>
-        /// <param name="generatePrefixes">Whether to auto-generate additionally units for milli, kilo etc.</param>
-        /// <param name="canBeNegative">Whether this value can be negative</param>
-        public Unit(string fullName, string suffix, Quantity quantity, bool generatePrefixes, bool canBeNegative = false)
-        {
-            FullName = fullName;
-            FullNamePlural = fullName + "s";
-            Suffix = suffix;
-            ToBaseUnit = value => value;
-            FromBaseUnit = value => value;
-            Quantity = quantity;
-            CanBeNegative = canBeNegative;
-            UnitManager.Units.Add(fullName, this);
+            if (toBaseUnit is null)
+            {
+                ToBaseUnit = value => value;
+            }
+            if (fromBaseUnit is null)
+            {
+                FromBaseUnit = value => value;
+            }
             if(generatePrefixes)
             {
                 foreach (KeyValuePair<int, (string,string)> prefix in Prefixes)
                 {
-                    _ = new Unit(prefix.Value.Item1 + fullName.ToLower(), prefix.Value.Item2 + suffix, quantity, false, canBeNegative)
+                    _ = new Unit(prefix.Value.Item1 + fullName.ToLower(), prefix.Value.Item2 + suffix, quantity, false, canBeNegative: canBeNegative)
                     {
                         ToBaseUnit = value => value * Math.Pow(10, prefix.Key),
                         FromBaseUnit = value => value / Math.Pow(10, prefix.Key),
@@ -96,8 +89,10 @@ namespace BetterNumberSystem
                     };
                 }
             }
+            UnitAsBaseUnits = unitAsBaseUnits;
+            UnitManager.Units.Add(fullName, this);
         }
-
+        #endregion
         /// <summary>
         /// Gets all the currently available number units
         /// </summary>
@@ -194,14 +189,14 @@ namespace BetterNumberSystem
             prefixes.Add(-1, ("Deci", "prefixes"));
             #endregion
 
-            _ = new Unit("Plain", "", Quantity.Plain, value => value, value => value, canBeNegative: true);
+            _ = new Unit("Plain", "", Quantity.Plain, false, value => value, value => value, canBeNegative: true);
 
             #region Base Units
             _ = new Unit("Second", "s", Quantity.Time, generatePrefixes: true);
             _ = new Unit("Metre", "m", Quantity.Length, generatePrefixes: true);
             _ = new Unit("Gram", "g", Quantity.Mass, generatePrefixes: true);
             _ = new Unit("Ampere", "A", Quantity.ElectricCurrent, generatePrefixes: true);
-            _ = new Unit("Kelvin", "K", Quantity.Temperature, Kelvin => Kelvin, Kelvin => Kelvin, canBeNegative: false);
+            _ = new Unit("Kelvin", "K", Quantity.Temperature, generatePrefixes: false, canBeNegative: false);
             _ = new Unit("Mole", "mol", Quantity.AmountOfSubstance, generatePrefixes: true);
             _ = new Unit("Candela", "cd", Quantity.LuminousIntensity, generatePrefixes: true);
             #endregion
@@ -217,7 +212,7 @@ namespace BetterNumberSystem
             _ = new Unit("Volt", "V", Quantity.Voltage, generatePrefixes: true);
             _ = new Unit("Farad", "F", Quantity.Capacitance, generatePrefixes: true);
             _ = new Unit("Ohm", "Ω", Quantity.Resistance, generatePrefixes: true);
-            _ = new Unit("Siemens", "Ω", Quantity.Resistance, generatePrefixes: true) { FullNamePlural = "Siemens"};
+            _ = new Unit("Siemens", "S", Quantity.Resistance, generatePrefixes: true) { FullNamePlural = "Siemens"};
             _ = new Unit("Weber", "Wb", Quantity.MagneticFlux, generatePrefixes: true);
             _ = new Unit("Tesla", "T", Quantity.MagneticFieldStrength, generatePrefixes: true);
             _ = new Unit("Henry", "H", Quantity.Inductance, generatePrefixes: true) { FullNamePlural = "Henries" };
@@ -225,10 +220,10 @@ namespace BetterNumberSystem
             _ = new Unit("Lumen", "lm", Quantity.Illuminance, generatePrefixes: true);
 
             // Units with weird conversions / units that do not use the metric prefixes
-            _ = new Unit("Radian", "rad", Quantity.Angle, Radians => Radians, Radians => Radians, canBeNegative: true);
-            _ = new Unit("Degree", "°", Quantity.Angle, Radians => Radians * (Math.PI / 180), Radians => Radians * (180 / Math.PI), canBeNegative: true);
+            _ = new Unit("Radian", "rad", Quantity.Angle, false, Radians => Radians, Radians => Radians, canBeNegative: true);
+            _ = new Unit("Degree", "°", Quantity.Angle, false, Radians => Radians * (Math.PI / 180), Radians => Radians * (180 / Math.PI), canBeNegative: true);
 
-            _ = new Unit("Celsius", "°C", Quantity.Temperature, Kelvin => Kelvin + 273.15, Kelvin => Kelvin - 273.15, canBeNegative: false);
+            _ = new Unit("Celsius", "°C", Quantity.Temperature, false, Kelvin => Kelvin + 273.15, Kelvin => Kelvin - 273.15, canBeNegative: false);
 
             #region Non-SI Units
             _ = new Unit("Litre", "L", Quantity.Volume, generatePrefixes: true);
