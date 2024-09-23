@@ -51,7 +51,7 @@ namespace BetterNumberSystem
             Unit = unit ?? UnitManager.Unit["Plain"];
             Quantity = measurementType ?? Unit.Quantity;
             if (numericValue < 0 && !Unit.CanBeNegative)
-                throw new ArgumentException(Unit.FullName + " cannot be negative");
+                throw new ArgumentException(Unit.Name + " cannot be negative");
             else NumericValue = numericValue;
         }
 
@@ -127,7 +127,7 @@ namespace BetterNumberSystem
 
                 if (unit)
                 {
-                    outputString += Unit.Suffix;
+                    outputString += Unit.Symbol;
                 }
 
                 if (type)
@@ -381,7 +381,7 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
-                            Unit.GetNumberUnitByFullName("Sq" + a.Unit.FullName),
+                            Unit.GetNumberUnitByFullName("Sq" + a.Unit.Name),
                             Quantity.Area
                         );
                     }
@@ -389,7 +389,7 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)a.NumericValue * (float)b.Convert(a.Unit).NumericValue,
-                            Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName),
+                            Unit.GetNumberUnitByFullName("Cu" + a.Unit.Name),
                             Quantity.Volume
                         );
                     }
@@ -404,8 +404,8 @@ namespace BetterNumberSystem
                     {
                         return new Number(
                             (float)(a.NumericValue * a.NumericValue) * ((float)b
-                                .Convert(Unit.GetNumberUnitByFullName(a.Unit.FullName.Replace("Sq", ""))).NumericValue),
-                            Unit.GetNumberUnitByFullName("Cu" + a.Unit.FullName.Replace("Sq", "")),
+                                .Convert(Unit.GetNumberUnitByFullName(a.Unit.Name.Replace("Sq", ""))).NumericValue),
+                            Unit.GetNumberUnitByFullName("Cu" + a.Unit.Name.Replace("Sq", "")),
                             Quantity.Volume
                         );
                     }

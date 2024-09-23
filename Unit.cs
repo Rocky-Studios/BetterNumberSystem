@@ -5,26 +5,9 @@ namespace BetterNumberSystem
     /// <summary>
     /// A singular unit of measurement
     /// </summary>
-    public class Unit
+    public class Unit : Constant
     {
-        /// <summary>
-        /// Prefixes added to units to produce multiples and submultiples of the original unit
-        /// The key is the exponent eg. 3 for kilo or -3 for milli, and the value is the name and symbol
-        /// </summary>
-        public static Dictionary<int, (string, string)> Prefixes = [];
         #region Fields
-        /// <summary>
-        /// The full name of the unit eg. Millimetre
-        /// </summary>
-        public string FullName { get; set; }
-        /// <summary>
-        /// The plural full name of the unit eg. Millimetres
-        /// </summary>
-        public string FullNamePlural = "";
-        /// <summary>
-        /// The short suffix of the unit eg. mm
-        /// </summary>
-        public string Suffix { get; set; }
         /// <summary>
         /// Whether this unit can be negative
         /// </summary>
@@ -54,17 +37,16 @@ namespace BetterNumberSystem
         /// <summary>
         /// Initialises a number unit
         /// </summary>
-        /// <param name="fullName">The full name</param>
-        /// <param name="suffix">The suffix after a number</param>
+        /// <param name="name">The full name</param>
+        /// <param name="symbol">The suffix after a number</param>
         /// <param name="quantity">Which category of measurement it goes into</param>
         /// <param name="toBaseUnit">The conversion function from this to the base unit</param>
         /// <param name="fromBaseUnit">The conversion function from the base unit to this unit</param>
         /// <param name="canBeNegative">Whether this value can be negative</param>
-        public Unit(string fullName, string suffix, Quantity quantity, bool generatePrefixes, ConversionFunction toBaseUnit = null, ConversionFunction fromBaseUnit = null, bool canBeNegative = false, PronumeralCollection unitAsBaseUnits = null)
+        public Unit(string name, string symbol, Quantity quantity, bool generatePrefixes, ConversionFunction toBaseUnit = null, ConversionFunction fromBaseUnit = null, bool canBeNegative = false, PronumeralCollection unitAsBaseUnits = null): base()
         {
-            FullName = fullName;
-            FullNamePlural = fullName + "s";
-            Suffix = suffix;
+            Name = name;
+            Symbol = symbol;
             ToBaseUnit = toBaseUnit;
             FromBaseUnit = fromBaseUnit;
             Quantity = quantity;
@@ -79,9 +61,9 @@ namespace BetterNumberSystem
             }
             if(generatePrefixes)
             {
-                foreach (KeyValuePair<int, (string,string)> prefix in Prefixes)
+                foreach (KeyValuePair<int, (string,string)> prefix in UnitManager.Prefixes)
                 {
-                    _ = new Unit(prefix.Value.Item1 + fullName.ToLower(), prefix.Value.Item2 + suffix, quantity, false, canBeNegative: canBeNegative)
+                    _ = new Unit(prefix.Value.Item1 + name.ToLower(), prefix.Value.Item2 + symbol, quantity, false, canBeNegative: canBeNegative)
                     {
                         ToBaseUnit = value => value * Math.Pow(10, prefix.Key),
                         FromBaseUnit = value => value / Math.Pow(10, prefix.Key),
@@ -90,7 +72,7 @@ namespace BetterNumberSystem
                 }
             }
             UnitAsBaseUnits = unitAsBaseUnits;
-            UnitManager.Units.Add(fullName, this);
+            UnitManager.Units.Add(name, this);
         }
         #endregion
         /// <summary>
@@ -116,7 +98,7 @@ namespace BetterNumberSystem
         {
             foreach (Unit numberUnit in GetNumberUnits())
             {
-                if (fullName.Equals(numberUnit.FullName))
+                if (fullName.Equals(numberUnit.Name))
                 {
                     return numberUnit;
                 }
@@ -132,7 +114,7 @@ namespace BetterNumberSystem
         {
             foreach (Unit numberUnit in GetNumberUnits())
             {
-                if (suffix.Equals(numberUnit.Suffix))
+                if (suffix.Equals(numberUnit.Symbol))
                 {
                     return numberUnit;
                 }
@@ -147,6 +129,13 @@ namespace BetterNumberSystem
         public static UnitManager Unit => instance.Value;
 
         public static Dictionary<string, Unit> Units = new Dictionary<string, Unit>();
+        
+        
+        /// <summary>
+        /// Prefixes added to units to produce multiples and submultiples of the original unit
+        /// The key is the exponent eg. 3 for kilo or -3 for milli, and the value is the name and symbol
+        /// </summary>
+        public static Dictionary<int, (string, string)> Prefixes = [];
 
         public Unit this[string name]
         {
@@ -160,7 +149,7 @@ namespace BetterNumberSystem
         static UnitManager()
         {
             #region Prefixes
-            Dictionary<int, (string,string)> prefixes = BetterNumberSystem.Unit.Prefixes;
+            Dictionary<int, (string,string)> prefixes = UnitManager.Prefixes;
             // https://en.wikipedia.org/wiki/International_System_of_Units#Prefixes
             prefixes.Add(30, ("Quetta", "Q"));
             prefixes.Add(27, ("Ronna", "R"));
@@ -203,20 +192,35 @@ namespace BetterNumberSystem
 
             //https://en.wikipedia.org/wiki/International_System_of_Units#Derived_units
             // DERIVED UNITS
-            _ = new Unit("Hertz", "hz", Quantity.Frequency, generatePrefixes: true) { FullNamePlural = "Hertz" };
-            _ = new Unit("Newton", "N", Quantity.Force, generatePrefixes: true);
-            _ = new Unit("Pascal", "Pa", Quantity.Pressure, generatePrefixes: true);
-            _ = new Unit("Joule", "J", Quantity.Energy, generatePrefixes: true);
+            _ = new Unit("Hertz", "hz", Quantity.Frequency, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -1)!
+            ]);
+            _ = new Unit("Newton", "N", Quantity.Force, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -2)!
+            ]);
+            _ = new Unit("Pascal", "Pa", Quantity.Pressure, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "N"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -2)!
+            ]);
+            _ = new Unit("Joule", "J", Quantity.Energy, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "N"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -2)!
+                
+            ]);
             _ = new Unit("Watt", "W", Quantity.Power, generatePrefixes: true);
             _ = new Unit("Coulomb", "C", Quantity.ElectricCharge, generatePrefixes: true);
             _ = new Unit("Volt", "V", Quantity.Voltage, generatePrefixes: true);
             _ = new Unit("Farad", "F", Quantity.Capacitance, generatePrefixes: true);
             _ = new Unit("Ohm", "Ω", Quantity.Resistance, generatePrefixes: true);
-            _ = new Unit("Siemens", "S", Quantity.Resistance, generatePrefixes: true) { FullNamePlural = "Siemens"};
+            _ = new Unit("Siemens", "S", Quantity.Resistance, generatePrefixes: true);
             _ = new Unit("Weber", "Wb", Quantity.MagneticFlux, generatePrefixes: true);
             _ = new Unit("Tesla", "T", Quantity.MagneticFieldStrength, generatePrefixes: true);
-            _ = new Unit("Henry", "H", Quantity.Inductance, generatePrefixes: true) { FullNamePlural = "Henries" };
-            _ = new Unit("Lux", "lx", Quantity.Illuminance, generatePrefixes: true) { FullNamePlural = "Luxes" };
+            _ = new Unit("Henry", "H", Quantity.Inductance, generatePrefixes: true);
+            _ = new Unit("Lux", "lx", Quantity.Illuminance, generatePrefixes: true);
             _ = new Unit("Lumen", "lm", Quantity.Illuminance, generatePrefixes: true);
 
             // Units with weird conversions / units that do not use the metric prefixes
@@ -233,8 +237,8 @@ namespace BetterNumberSystem
             {
                 Pronumeral.Pronumerals.Add(new Pronumeral()
                 {
-                    Name = unit.Value.FullName,
-                    Symbol = unit.Value.Suffix,
+                    Name = unit.Value.Name,
+                    Symbol = unit.Value.Symbol,
                     Value = new ExpressionTerm()
                     {
                         Value = new Number(),
