@@ -189,9 +189,17 @@ namespace BetterNumberSystem
             _ = new Unit("Mole", "mol", Quantity.AmountOfSubstance, generatePrefixes: true);
             _ = new Unit("Candela", "cd", Quantity.LuminousIntensity, generatePrefixes: true);
             #endregion
-
+            #region Derived Units
             //https://en.wikipedia.org/wiki/International_System_of_Units#Derived_units
-            // DERIVED UNITS
+            _ = new Unit("Radian", "rad", Quantity.Angle, false, Radians => Radians, Radians => Radians, canBeNegative: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m")!, 1),
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m")!, -1),
+            ]);
+            _ = new Unit("Steradian", "sr", Quantity.SolidAngle, false, Steradians => Steradians, Steradians => Steradians, canBeNegative: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m")!, 2),
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m")!, -2),
+            ]);
+            
             _ = new Unit("Hertz", "hz", Quantity.Frequency, generatePrefixes: true, unitAsBaseUnits: [
                 (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -1)!
             ]);
@@ -209,43 +217,86 @@ namespace BetterNumberSystem
                 (Pronumeral.Pronumerals.Find(p => p.Symbol == "N"), 1)!,
                 (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
                 (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -2)!
-                
             ]);
-            _ = new Unit("Watt", "W", Quantity.Power, generatePrefixes: true);
-            _ = new Unit("Coulomb", "C", Quantity.ElectricCharge, generatePrefixes: true);
-            _ = new Unit("Volt", "V", Quantity.Voltage, generatePrefixes: true);
-            _ = new Unit("Farad", "F", Quantity.Capacitance, generatePrefixes: true);
-            _ = new Unit("Ohm", "Ω", Quantity.Resistance, generatePrefixes: true);
-            _ = new Unit("Siemens", "S", Quantity.Resistance, generatePrefixes: true);
-            _ = new Unit("Weber", "Wb", Quantity.MagneticFlux, generatePrefixes: true);
-            _ = new Unit("Tesla", "T", Quantity.MagneticFieldStrength, generatePrefixes: true);
-            _ = new Unit("Henry", "H", Quantity.Inductance, generatePrefixes: true);
-            _ = new Unit("Lux", "lx", Quantity.Illuminance, generatePrefixes: true);
-            _ = new Unit("Lumen", "lm", Quantity.Illuminance, generatePrefixes: true);
-
-            // Units with weird conversions / units that do not use the metric prefixes
-            _ = new Unit("Radian", "rad", Quantity.Angle, false, Radians => Radians, Radians => Radians, canBeNegative: true);
-            _ = new Unit("Degree", "°", Quantity.Angle, false, Radians => Radians * (Math.PI / 180), Radians => Radians * (180 / Math.PI), canBeNegative: true);
-
-            _ = new Unit("Celsius", "°C", Quantity.Temperature, false, Kelvin => Kelvin + 273.15, Kelvin => Kelvin - 273.15, canBeNegative: false);
-
+            _ = new Unit("Watt", "W", Quantity.Power, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -3)!,
+            ]);
+            _ = new Unit("Coulomb", "C", Quantity.ElectricCharge, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), 1)!,
+            ]);
+            _ = new Unit("Volt", "V", Quantity.Voltage, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), 3)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), -1)!,
+            ]);
+            _ = new Unit("Farad", "F", Quantity.Capacitance, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), -1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), 4)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), 2)!,
+            ]);
+            _ = new Unit("Ohm", "Ω", Quantity.Resistance, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -3)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), 2)!,
+            ]);
+            _ = new Unit("Siemens", "S", Quantity.Resistance, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), -1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), 3)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), 2)!,
+            ]);
+            _ = new Unit("Weber", "Wb", Quantity.MagneticFlux, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), -1)!,
+            ]);
+            _ = new Unit("Tesla", "T", Quantity.MagneticFieldStrength, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), -1)!,
+            ]);
+            _ = new Unit("Henry", "H", Quantity.Inductance, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "Kg"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "A"), -2)!,
+            ]);
+            _ = new Unit("Celsius", "°C", Quantity.Temperature, false, Kelvin => Kelvin + 273.15, Kelvin => Kelvin - 273.15, canBeNegative: false, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "K"), 1)!
+            ]);
+            _ = new Unit("Lumen", "lm", Quantity.Illuminance, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "cd"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -2)!,
+            ]);
+            _ = new Unit("Lux", "lx", Quantity.Illuminance, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "cd"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), -4)!,
+            ]);
+            _ = new Unit("Becquerel", "Bq", Quantity.Radioactivity, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -1)!
+            ]);
+            _ = new Unit("Gray", "Gy", Quantity.AbsorbedDose, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "m"), 2)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -2)!,
+            ]);
+            _ = new Unit("Katal", "kat", Quantity.CatalyticActivity, generatePrefixes: true, unitAsBaseUnits: [
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "mol"), 1)!,
+                (Pronumeral.Pronumerals.Find(p => p.Symbol == "s"), -1)!,
+            ]);
+            #endregion
             #region Non-SI Units
             _ = new Unit("Litre", "L", Quantity.Volume, generatePrefixes: true);
+            _ = new Unit("Degree", "°", Quantity.Angle, false, Radians => Radians * (Math.PI / 180), Radians => Radians * (180 / Math.PI), canBeNegative: true);
             #endregion
-            
-            foreach (var unit in Units)
-            {
-                Pronumeral.Pronumerals.Add(new Pronumeral()
-                {
-                    Name = unit.Value.Name,
-                    Symbol = unit.Value.Symbol,
-                    Value = new ExpressionTerm()
-                    {
-                        Value = new Number(),
-                        Pronumerals = [(Pronumeral.NO_PRONUMERAL, 1)]
-                    }
-                });
-            }
         }
     }
 }
