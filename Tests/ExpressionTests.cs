@@ -1,15 +1,15 @@
-﻿using NUnit.Framework;
-using BetterNumberSystem;
-using BetterNumberSystem.Expression;
+﻿using BetterNumberSystem.Expression;
+using NUnit.Framework;
 
 namespace BetterNumberSystem.Tests;
+
 /// <summary>
-/// Tests regarding expressions and math
+///     Tests regarding expressions and math
 /// </summary>
 public class ExpressionTests
 {
     /// <summary>
-    /// Tests whether adding numbers works correctly
+    ///     Tests whether adding numbers works correctly
     /// </summary>
     [Test]
     public void NumberSumTest()
@@ -19,9 +19,9 @@ public class ExpressionTests
         Expression.Expression expression = numA + numB;
         Assert.AreEqual(expression.Evaluate().ToString(), "3.05");
     }
-    
+
     /// <summary>
-    /// Tests whether adding numbers with units works correctly
+    ///     Tests whether adding numbers with units works correctly
     /// </summary>
     [Test]
     public void NumberSumTestWithUnits()
@@ -31,9 +31,9 @@ public class ExpressionTests
         Expression.Expression expression = numA + numB;
         Assert.AreEqual(expression.Evaluate().ToString(), "1.07m");
     }
-    
+
     /// <summary>
-    /// Tests whether subtracting numbers works correctly
+    ///     Tests whether subtracting numbers works correctly
     /// </summary>
     [Test]
     public void NumberDiffTest()
@@ -43,9 +43,9 @@ public class ExpressionTests
         Expression.Expression expression = numA - numB;
         Assert.AreEqual(expression.Evaluate().ToString(), "0.85");
     }
-    
+
     /// <summary>
-    /// Tests whether subtracting numbers with units works correctly
+    ///     Tests whether subtracting numbers with units works correctly
     /// </summary>
     [Test]
     public void NumberDiffTestWithUnits()
@@ -55,16 +55,17 @@ public class ExpressionTests
         Expression.Expression expression = numA - numB;
         Assert.AreEqual(expression.Evaluate().ToString(), "1.03m");
     }
-    
+
 
     /// <summary>
-    /// Tests the cosine function
+    ///     Tests the cosine function
     /// </summary>
     [Test]
     public void CosineTest()
     {
         Number angle = new(1, UnitManager.Units["Radian"]);
         Expression.Expression expression = new(FunctionManager.Get("Cosine", [new ExpressionGroup(angle)]));
-        Assert.AreEqual((expression.Evaluate()[[Pronumeral.NO_PRONUMERAL]][0].Value as Number).NumericValue, Math.Cos(1));
+        Assert.AreEqual((expression.Evaluate()[[Pronumeral.NoPronumeral]][0].Value as Number)!.NumericValue,
+            Math.Cos(1));
     }
 }
