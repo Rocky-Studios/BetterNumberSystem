@@ -297,9 +297,5 @@ public enum Quantity
     /// <summary>
     ///     Increase of rate of a chemical reaction due to a catalyst
     /// </summary>
-    CatalyticActivity,
-    /// <summary>
-    ///     
-    /// </summary>
-    SolidAngle,
+    CatalyticActivity
 }
