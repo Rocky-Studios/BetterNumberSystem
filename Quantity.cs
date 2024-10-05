@@ -1,305 +1,157 @@
 ﻿namespace BetterNumberSystem;
 
+
 /// <summary>
-///     The different categories that a number can be grouped into
+///    A property that can be quantified by measurement.
 /// </summary>
 public enum Quantity
 {
     /// <summary>
-    ///     A number with no unit
+    ///     A quantity that is either the amount of something or the number of items in a set or a ratio between two other quantities.
     /// </summary>
     Plain,
 
+    #region Base quantities
     /// <summary>
-    ///     A number representing length in space
+    ///   The length of the shortest straight path between two points.
     /// </summary>
     Length,
 
     /// <summary>
-    ///     A number representing area on a surface
-    /// </summary>
-    Area,
-
-    /// <summary>
-    ///     A number representing a quantity of 3D space
-    /// </summary>
-    Volume,
-
-    /// <summary>
-    ///     A number representing distance travelled over time
-    /// </summary>
-    Speed,
-
-    /// <summary>
-    ///     A number representing the temperature of particles
-    /// </summary>
-    Temperature,
-
-    /// <summary>
-    ///     A number representing the angle between two lines or surfaces
-    /// </summary>
-    Angle,
-
-    /// <summary>
-    ///     A number representing an object's total mass
+    ///     The amount of matter in an object.
     /// </summary>
     Mass,
-
+    
     /// <summary>
-    ///     An object representing the average mass per a unit of space
-    /// </summary>
-    Density,
-
-    /// <summary>
-    ///     A number representing a force acting on an object
-    /// </summary>
-    Force,
-
-    /// <summary>
-    ///     A number representing an amount of time
+    ///  The duration of an event or the duration of the gap between two events.
     /// </summary>
     Time,
 
     /// <summary>
-    ///     A number representing an amount of energy
-    /// </summary>
-    Energy,
-
-    /// <summary>
-    ///     The amount of times something happens, usually over a fixed amount of time
-    /// </summary>
-    Frequency,
-
-    /// <summary>
-    ///     How much force something is pushing something else by
-    /// </summary>
-    Pressure,
-
-    /// <summary>
-    /// </summary>
-    Current,
-
-    /// <summary>
-    ///     How fast work is done, or how fast energy is transferred from object to another
-    /// </summary>
-    Power,
-
-    /// <summary>
-    /// </summary>
-    ElectricCharge,
-
-    /// <summary>
-    ///     The force making electrical charge move
-    /// </summary>
-    Voltage,
-
-    /// <summary>
-    ///     The capability of a deice to store electric charge
-    /// </summary>
-    Capacitance,
-
-    /// <summary>
-    ///     The difficulty of passing an electric current through a substance (opposite of conductance)
-    /// </summary>
-    Resistance,
-
-    /// <summary>
-    ///     The ease of an electric current passing through a substance (opposite of resistance)
-    /// </summary>
-    Conductance,
-
-    /// <summary>
-    /// </summary>
-    MagneticFlux,
-
-    /// <summary>
-    ///     The strength of a field created by a magnet
-    /// </summary>
-    MagneticFieldStrength,
-
-    /// <summary>
-    /// </summary>
-    Inductance,
-
-    /// <summary>
-    ///     How bright a light is
-    /// </summary>
-    Illuminance,
-
-    /// <summary>
-    /// </summary>
-    Radioactivity,
-
-    /// <summary>
-    ///     How much there is of something
-    /// </summary>
-    AmountOfSubstance,
-
-    /// <summary>
-    ///     How much light is emitted by a source
-    /// </summary>
-    LuminousIntensity,
-
-    /// <summary>
-    ///     The flow of charged particles
+    ///  The quantity of electron flow through a substance.
     /// </summary>
     ElectricCurrent,
 
     /// <summary>
-    ///     The speed of an object in a certain direction
+    ///  The kinetic vibrations of particles in a substance.
     /// </summary>
-    Velocity,
+    Temperature,
+    
+    /// <summary>
+    ///  How much of something there is.
+    /// </summary>
+    AmountOfSubstance,
 
     /// <summary>
-    ///     The rate of change of velocity
+    /// How intense light is.
     /// </summary>
-    Acceleration,
-
+    LuminousIntensity,
+    #endregion
+    
+    #region Derived quantities
     /// <summary>
+    /// The rate at which something happens.
     /// </summary>
-    WaveNumber,
-
+    Frequency,
     /// <summary>
-    ///     The amount of a substance in a certain area
+    /// A geometric concept formed by two rays that share a common endpoint.
     /// </summary>
-    SurfaceDensity,
-
+    Angle,
     /// <summary>
-    ///     The amount of a current in a certain area
-    /// </summary>
-    CurrentDensity,
-
-    /// <summary>
-    ///     The concentration of particles in a volume
-    /// </summary>
-    Concentration,
-
-    /// <summary>
-    ///     The concentration of mass in a volume
-    /// </summary>
-    MassConcentration,
-
-    /// <summary>
-    ///     The concentration of light in an area
-    /// </summary>
-    Luminance,
-
-    /// <summary>
-    ///     A fluid's resistance to deformation
-    /// </summary>
-    DynamicViscosity,
-
-    /// <summary>
-    ///     Measure of force about an axis
-    /// </summary>
-    Torque,
-
-    /// <summary>
-    ///     The tendency of a fluid to shrink to its minimum surface area
-    /// </summary>
-    SurfaceTension,
-
-    /// <summary>
-    ///     How angular position changes over time
-    /// </summary>
-    AngularVelocity,
-
-    /// <summary>
-    ///     The rate of change of angular velocity
-    /// </summary>
-    AngularAcceleration,
-
-    /// <summary>
-    ///     Energy input to an area
-    /// </summary>
-    HeatFluxDensity,
-
-    /// <summary>
-    ///     The amount of heat energy needed to raise the temperature of a substance
-    /// </summary>
-    HeatCapacity,
-
-    /// <summary>
-    ///     The amount of heat energy needed to raise the temperature of a substance per unit mass
-    /// </summary>
-    SpecificHeatCapacity,
-
-    /// <summary>
-    ///     Energy per unit mass
-    /// </summary>
-    SpecificEnergy,
-
-    /// <summary>
-    ///     A material's ability to conduct heat
-    /// </summary>
-    ThermalConductivity,
-
-    /// <summary>
-    ///     The amount of energy per volume
-    /// </summary>
-    EnergyDensity,
-
-    /// <summary>
-    ///     The strength of the field around charged particles
-    /// </summary>
-    ElectricFieldStrength,
-
-    /// <summary>
-    ///     The amount of electric charge per volume
-    /// </summary>
-    ElectricChargeDensity,
-
-    /// <summary>
-    ///     The electromagnetic effects of polarisation
-    /// </summary>
-    ElectricFluxDensity,
-
-    /// <summary>
-    ///     The electric polarizability of a material
-    /// </summary>
-    Permittivity,
-
-    /// <summary>
-    ///     The magnetization produced by a magnetic field
-    /// </summary>
-    Permeability,
-
-    /// <summary>
-    ///     The amount of energy per amount of substance
-    /// </summary>
-    MolarEnergy,
-
-    /// <summary>
-    ///     The amount of heat energy needed to raise the temperature of a substance per mole
-    /// </summary>
-    MolarHeatCapacity,
-
-    /// <summary>
-    ///     Measure of exposure to ionizing radiation
-    /// </summary>
-    Exposure,
-
-    /// <summary>
-    ///     The amount of ionizing radiation absorbed by a material
-    /// </summary>
-    AbsorbedDose,
-
-    /// <summary>
-    ///     The radiant flux emitted, reflected, transmitted or received by a surface per unit solid angle
-    /// </summary>
-    RadiantIntensity,
-
-    /// <summary>
-    ///     The radiant flux emitted, reflected, transmitted or received per surface
-    /// </summary>
-    Radiance,
-
-    /// <summary>
-    ///     Increase of rate of a chemical reaction due to a catalyst
-    /// </summary>
-    CatalyticActivity,
-    /// <summary>
-    ///     
+    /// A three-dimensional measure of the extent of an object as viewed from a point, quantified in steradians and representing the area on the surface of a sphere subtended by that angle.
     /// </summary>
     SolidAngle,
+    /// <summary>
+    /// An influence to an object's velocity
+    /// </summary>
+    Force,
+    /// <summary>
+    /// The extent of gravitational force acted upon an object
+    /// </summary>
+    Weight,
+    /// <summary>
+    /// A force applied perpendicular to a surface
+    /// </summary>
+    Pressure,
+    /// <summary>
+    /// The forces present during deformation
+    /// </summary>
+    Stress,
+    /// <summary>
+    /// Energy is the capacity to do work or produce change.
+    /// </summary>
+    Energy,
+    /// <summary>
+    /// Thermal energy that is transferred between substances due to a temperature difference.
+    /// </summary>
+    Heat,
+    /// <summary>
+    /// Power is the rate at which energy is transferred, converted, or used.
+    /// </summary>
+    Power,
+    /// <summary>
+    /// The total amount of radiant energy emitted, transmitted, or received per unit time, and represents the power of electromagnetic radiation, including visible light.
+    /// </summary>
+    RadiantFlux,
+    /// <summary>
+    /// The property of matter that causes it to experience a force when placed in an electromagnetic field.
+    /// </summary>
+    ElectricCharge,
+    /// <summary>
+    /// The potential electric difference between two points in a circuit.
+    /// </summary>
+    Voltage,
+    /// <summary>
+    /// The capacity of a device to store electric charge.
+    /// </summary>
+    ElectricCapacitance,
+    /// <summary>
+    /// The opposition to the flow of electric current.
+    /// </summary>
+    ElectricResistance,
+    /// <summary>
+    /// The ease with which an electric current can flow through a substance.
+    /// </summary>
+    ElectricConductance,
+    /// <summary>
+    /// The surface integral of the normal component of the magnetic field over a surface.
+    /// </summary>
+    MagneticFlux,
+    /// <summary>
+    /// The strength and direction of a magnetic field at a specific point.
+    /// </summary>
+    MagneticFluxDensity,
+    /// <summary>
+    /// A conductor's ability to store magnetic energy in response to an electric current.
+    /// </summary>
+    MagneticInductance,
+    /// <summary>
+    /// The tendency of an electrical conductor to oppose a change in the electric current flowing through it.
+    /// </summary>
+    ElectricalInductance,
+    /// <summary>
+    /// The luminous energy emitted over time.
+    /// </summary>
+    LuminousFlux,
+    /// <summary>
+    /// The total luminous flux over a surface.
+    /// </summary>
+    Illuminance,
+    /// <summary>
+    /// The average rate at which a radioactive substance undergoes decay
+    /// </summary>
+    NuclearRadioactivity,
+    /// <summary>
+    /// The amount of energy absorbed by a substance per unit mass.
+    /// </summary>
+    AbsorbedDose,
+    /// <summary>
+    /// The probability of ionizing radiation-induced cancer and/or genetic damage.
+    /// </summary>
+    EquivalentDose,
+    /// <summary>
+    /// The increase to the rate of a chemical reaction when a catalyst is present.
+    /// </summary>
+    CatalyticActivity,
+    #endregion
 }
