@@ -13,8 +13,9 @@ public class NumberTests
     [Test]
     public void NumericConvertTest()
     {
-        Number number = new(1.05, UnitManager.Units["Metre"]);
-        Assert.AreEqual(number.Convert("Millimetre").NumericValue, 1050);
+        Term t = new(new Number(10.5), ["Centi", "metre"]);
+        t = t.Convert("milli");
+        Assert.AreEqual(105, (t.Coefficient as Number)!.Value);
     }
 
     /// <summary>
@@ -23,8 +24,9 @@ public class NumberTests
     [Test]
     public void TextConvertTest()
     {
-        Number number = new(1.05, UnitManager.Units["Metre"]);
-        Assert.AreEqual(number.Convert("Millimetre").ToString(), "1050mm");
+        Term t = new(new Number(10.5), ["Centi", "metre"]);
+        t = t.Convert("milli");
+        Assert.AreEqual("105 mm", t.ToString());
     }
 
     /// <summary>
@@ -33,27 +35,19 @@ public class NumberTests
     [Test]
     public void CelsiusToKelvinTest()
     {
-        Number number = new(25, UnitManager.Units["Celsius"]);
-        Assert.AreEqual(number.Convert("Kelvin").NumericValue, 298.15);
+        Term t = new(new Number(25), ["Celsius"]);
+        t = t.ConvertUnit((PronumeralManager.FindPronumeralBySymbol<Unit>("K") as Unit)!);
+        Assert.AreEqual("298.15 K", t.ToString());
     }
-
+    
     /// <summary>
-    ///     Test if the number is parsed correctly
+    ///     Test if the conversion from Celsius to Kelvin is correct
     /// </summary>
     [Test]
-    public void ParseTest()
+    public void RadToDegreeTest()
     {
-        Number number = Number.Parse("1.05m");
-        Assert.AreEqual(number.ToString(), "1.05m");
-    }
-
-    /// <summary>
-    ///     Test whether converting the number to a string and then parsing it back results in the same number
-    /// </summary>
-    [Test]
-    public void ReverseParseTest()
-    {
-        Number number = new(1.05, UnitManager.Units["Metre"]);
-        Assert.AreEqual(Number.Parse(number.ToString()), number);
+        Term t = new(new Number(Math.PI), ["radian"]);
+        t = t.ConvertUnit((PronumeralManager.Pronumerals["°"] as Unit)!);
+        Assert.AreEqual("180 °", t.ToString());
     }
 }

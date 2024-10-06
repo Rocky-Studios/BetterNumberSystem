@@ -1,11 +1,9 @@
 ﻿# Better Number System
 **By Rocky Studios**
 
-Standard numbering in programming is good for just that, *standard programming*. But not all programming is standard progamming, and sometimes you need a better way to handle numbers. This program addresses quite a few of these errors:
+Standard numbering in programming is good for just that, *standard programming*. But not all programming is standard programming, and sometimes you need a better way to handle numbers. This program addresses quite a few of these errors:
 
 - Do not support units like litres or cm³
-
-- No easy way to show a number in different notations, eg 123,000,000 as '123 million' or 123 × 10⁶
 
 - No straightforward way to perform math with different units
 
