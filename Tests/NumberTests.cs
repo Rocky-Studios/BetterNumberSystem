@@ -16,7 +16,7 @@ public class NumberTests
     {
         Term t = new(new Number(10.5), ["Centi", "metre"]);
         t = t.Convert("milli");
-        Assert.AreEqual(105, (double)(t.Value as Number)!.Value);
+        Assert.AreEqual(105, (t.Coefficient as Number)!.Value);
     }
 
     /// <summary>
@@ -37,7 +37,18 @@ public class NumberTests
     public void CelsiusToKelvinTest()
     {
         Term t = new(new Number(25), ["Celsius"]);
-        t = t.ConvertUnit(PronumeralManager.FindPronumeralBySymbol<Unit>("K") as Unit);
+        t = t.ConvertUnit((PronumeralManager.FindPronumeralBySymbol<Unit>("K") as Unit)!);
         Assert.AreEqual("298.15 K", t.ToString());
+    }
+    
+    /// <summary>
+    ///     Test if the conversion from Celsius to Kelvin is correct
+    /// </summary>
+    [Test]
+    public void RadToDegreeTest()
+    {
+        Term t = new(new Number(Math.PI), ["radian"]);
+        t = t.ConvertUnit((PronumeralManager.Pronumerals["°"] as Unit)!);
+        Assert.AreEqual("180 °", t.ToString());
     }
 }

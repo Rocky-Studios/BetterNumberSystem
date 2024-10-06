@@ -12,13 +12,9 @@ public class Prefix : Constant
     /// <param name="symbol"> </param>
     /// <param name="value"> </param>
     public Prefix(string name, string symbol, Term value) : base(name, symbol, value) { }
-    
+
     /// <summary>
     ///     The multiplier for this prefix
     /// </summary>
-    public double Multiplier
-    {
-        get { return (double) (Value.Value as Number)!.Value; }
-    }
-
+    public double Multiplier => (Value.Coefficient as Number)!.Value;
 }

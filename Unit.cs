@@ -6,10 +6,11 @@
 public class Unit : Constant
 {
     #region Fields
+
     /// <summary>
-    /// What quantity this unit measures
+    ///     What quantity this unit measures
     /// </summary>
-    public Quantity Quantity;
+    public readonly Quantity Quantity;
 
     /// <summary>
     ///     This unit expressed in terms of the base SI Units
@@ -27,15 +28,14 @@ public class Unit : Constant
     /// <param name="symbol"> The suffix after a number </param>
     /// <param name="quantity"> Which category of measurement it goes into </param>
     /// <param name="unitAsBaseUnits"> The unit expressed in terms of the base SI Units </param>
-    public Unit(string name, string symbol, Quantity quantity, PronumeralCollection unitAsBaseUnits = null
-        )
+    public Unit(string name, string symbol, Quantity quantity, PronumeralCollection unitAsBaseUnits
+    )
         : base(name, symbol, new Term(new Number(1d), unitAsBaseUnits))
     {
         Name = name;
         Symbol = symbol;
         Quantity = quantity;
-        if (unitAsBaseUnits is null) UnitAsBaseUnits = [(this, 1)];
-        base.Value.Pronumerals = unitAsBaseUnits;
+        Value.Pronumerals = unitAsBaseUnits;
         UnitAsBaseUnits = unitAsBaseUnits;
         PronumeralManager.Pronumerals.Add(symbol, this);
     }
