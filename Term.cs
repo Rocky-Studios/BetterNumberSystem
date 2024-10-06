@@ -213,6 +213,10 @@ public class Term
         string output = terms.Aggregate("", (current, term) => current + (term + ", "));
         return output[..^2];
     }
+    
+    public static Term[] operator +(Term a, Term b) => Function.Sum.Process([a, b]);
+    public static Term[] operator -(Term a, Term b) => Function.Difference.Process([a, b]);
+    public static Term[] operator *(Term a, Term b) => Function.Product.Process([a, b]);
 }
 
 /// <summary>
