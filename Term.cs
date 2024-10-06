@@ -20,7 +20,13 @@ public class Term
     /// </summary>
     public Unit? Unit
     {
-        get { return Pronumerals.First(p => p.Item1 is Unit).Item1 as Unit; }
+        get
+        {
+            try {
+                return Pronumerals.First(p => p.Item1 is Unit).Item1 as Unit;
+            }
+            catch (Exception _) {return null;}
+        }
     }
 
     /// <summary>
@@ -39,6 +45,18 @@ public class Term
             }
 
             return p;
+        }
+    }
+    
+    /// <summary>
+    ///     The prefix of the unit of the term.
+    /// </summary>
+    public Quantity Quantity    
+    {
+        get
+        {
+            if (Unit is null) return Quantity.Plain;
+            return Unit.Quantity;
         }
     }
 
@@ -161,16 +179,17 @@ public class Term
         if (Coefficient is Number n)
             if (Math.Abs(n.Value - 1) > 0.0000000001) {
                 output += Coefficient.ToString();
-                output += " ";
+                if(Pronumerals.Count > 0) 
+                    output += " ";
             }
 
         PronumeralCollection negativePronumerals = [];
         PronumeralCollection positivePronumerals = [];
-
+        
         foreach ((Pronumeral, int) pronumeral in Pronumerals)
             if (pronumeral.Item2 < 0) negativePronumerals.Add(pronumeral);
             else if (pronumeral.Item2 > 0) positivePronumerals.Add(pronumeral);
-
+    
         foreach ((Pronumeral, int) p in positivePronumerals) {
             output += p.Item1.Symbol;
             if (p.Item2 != 1) output += "^" + p.Item2;
@@ -183,6 +202,16 @@ public class Term
         }
 
         return output;
+    }
+
+    public static bool MatchingPrefix(Term a, Term b)
+    {
+        return a.Prefix.Name == b.Prefix.Name;
+    }
+
+    public static string ToString(Term[] terms) {
+        string output = terms.Aggregate("", (current, term) => current + (term + ", "));
+        return output[..^2];
     }
 }
 

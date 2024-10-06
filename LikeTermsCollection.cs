@@ -1,4 +1,4 @@
-﻿namespace BetterNumberSystem.Expression;
+﻿namespace BetterNumberSystem;
 
 /// <summary>
 ///     Represents a collection of terms grouped by their pronumerals.
