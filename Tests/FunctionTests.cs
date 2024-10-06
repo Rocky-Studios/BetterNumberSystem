@@ -64,4 +64,25 @@ public class FunctionTests
         Assert.AreEqual("8 cm", Function.Difference.Process([t1, t2])[0].ToString());
     }
     #endregion
+    #region Trig Functions
+    /// <summary>
+    ///     Test if the conversion method updates the units correctly
+    /// </summary>
+    [Test]
+    public void SineTest()
+    {
+        Term t1 = new(new Number(1), ["radian"]);
+        Assert.AreEqual(Math.Sin(1), (Function.Sine.Process([t1])[0].Coefficient as Number)!.Value);
+    }
+    
+    /// <summary>
+    ///     Test if the conversion method updates the units correctly
+    /// </summary>
+    [Test]
+    public void CosineTest()
+    {
+        Term t1 = new(new Number(1), ["radian"]);
+        Assert.AreEqual(Math.Cos(1), (Function.Cosine.Process([t1])[0].Coefficient as Number)!.Value);
+    }
+    #endregion
 }

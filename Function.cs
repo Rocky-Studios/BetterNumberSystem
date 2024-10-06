@@ -169,6 +169,59 @@ public class Function
             ];
         })
     ], false);
+    
+    /// <summary>
+    ///     Represents the sine function.
+    /// </summary>
+    public static Function Sine = new("Sine", "sin",
+    [
+        new FunctionDelegate1In<Number>(inputs =>
+        {
+            Term t1 = inputs[0];
+            if(t1.Quantity != Quantity.Angle)
+                throw new ArithmeticException("Cannot take the sine of a non-angle quantity.");
+            
+            if(t1.Unit == PronumeralManager.Pronumerals["°"])
+                return
+                [
+                    new Term(new Number(Math.Sin((t1.Coefficient as Number)!.Value * Math.PI / 180)),
+                        t1.Pronumerals)
+                ];
+            if(t1.Unit == PronumeralManager.Pronumerals["rad"])
+                return
+                [
+                    new Term(new Number(Math.Sin((t1.Coefficient as Number)!.Value )),
+                        t1.Pronumerals)
+                ];
+            throw new ArithmeticException("Cannot take the sine of a non-angle quantity.");
+        })
+    ], false);
+    /// <summary>
+    ///     Represents the cosine function.
+    /// </summary>
+    public static Function Cosine = new("Cosine", "cos",
+    [
+        new FunctionDelegate1In<Number>(inputs =>
+        {
+            Term t1 = inputs[0];
+            if(t1.Quantity != Quantity.Angle)
+                throw new ArithmeticException("Cannot take the cosine of a non-angle quantity.");
+            
+            if(t1.Unit == PronumeralManager.Pronumerals["°"])
+                return
+                [
+                    new Term(new Number(Math.Cos((t1.Coefficient as Number)!.Value * Math.PI / 180)),
+                        t1.Pronumerals)
+                ];
+            if(t1.Unit == PronumeralManager.Pronumerals["rad"])
+                return
+                [
+                    new Term(new Number(Math.Cos((t1.Coefficient as Number)!.Value )),
+                        t1.Pronumerals)
+                ];
+            throw new ArithmeticException("Cannot take the cosine of a non-angle quantity.");
+        })
+    ], false);
 }
 
 /// <summary>
